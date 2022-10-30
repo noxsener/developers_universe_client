@@ -5,6 +5,7 @@ import 'package:developersuniverse_client/component/audio-playlist-manager.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 
 void main() async {
   if (Platform.isAndroid || Platform.isIOS) {
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
         title: 'Developers Universe',
         theme: ThemeData(
           primarySwatch: Colors.purple,

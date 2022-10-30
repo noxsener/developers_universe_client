@@ -1,11 +1,9 @@
-import 'dart:io';
-import 'dart:math' as math;
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:developersuniverse_client/component/audio-playlist-manager-controller.dart';
 import 'package:developersuniverse_client/services/connection-service.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,118 +20,17 @@ class AudioPlaylistManager extends StatefulWidget {
 
 class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
     with TickerProviderStateMixin {
-  List<Media> mediaList = [];
-  List<Genre> genreList = [];
-
-  /*Page - Filter*/
-  List<Genre> selectedGenreList = [];
-  int page = 0;
-  bool stillLoading = false;
-
-  PlayerMode _playerMode = PlayerMode.mediaPlayer;
-  final ScrollController _genreScrollController = ScrollController();
-  final ScrollController _scrollController = ScrollController();
-  late AnimationController _startButtonAnimationController;
-
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  Duration _duration = const Duration();
-  Duration _position = const Duration();
-  Media? media;
-  bool isLoop = false;
-
-  final PageController _pageController = PageController(viewportFraction: 0.6);
-  double currentPage = 0.0;
-
+  final c = Get.put(AudioPlaylistManagerController());
   bool landscape = false;
 
   @override
   void initState() {
-    _startButtonAnimationController = AnimationController(
-        duration: const Duration(milliseconds: 900), vsync: this);
     super.initState();
-    genreServiceGridCall(context, genreServiceGridRequest())
-        .then((List<Genre> genreListResponseValue) {
-      genreList = genreListResponseValue;
-    });
-    page = 0;
-    stillLoading = true;
-    mediaGenreServiceGridCall(
-            context, mediaGenreServiceGridRequest(page, selectedGenreList))
-        .then((List<MediaGenre> responseValue) {
-      stillLoading = false;
-      if (Platform.isAndroid) {
-        DeviceInfoPlugin()
-            .androidInfo
-            .then((AndroidDeviceInfo androidDeviceInfo) {
-          if (androidDeviceInfo.version.sdkInt < 23) {
-            _playerMode = PlayerMode.lowLatency;
-          }
-        });
-      }
-
-      _scrollController.addListener(() {
-        if (_scrollController.position.pixels >=
-                _scrollController.position.maxScrollExtent * 0.8 ||
-            _scrollController.offset >=
-                    _scrollController.position.maxScrollExtent &&
-                !_scrollController.position.outOfRange) {
-          // reached to bottom
-            if (stillLoading) {
-              return;
-            }
-            stillLoading = true;
-          page++;
-          mediaGenreServiceGridCall(context,
-                  mediaGenreServiceGridRequest(page, selectedGenreList))
-              .then((List<MediaGenre> responseValue) {
-            stillLoading = false;
-            setState(() {
-              mediaList.addAll(responseValue.map((e) => e.media!).toList());
-            });
-          });
-        }
-        // if (_scrollController.position.pixels <= _scrollController.position.minScrollExtent * 1.2) {
-        // move list
-        // }
-      });
-
-      mediaList = [];
-      mediaList.addAll(responseValue.map((e) => e.media!).toList());
-      setState(() {
-        if (mediaList.isNotEmpty) {
-          media = mediaList[0];
-        }
-      });
-
-      _audioPlayer.onDurationChanged.listen((event) {
-        setState(() {
-          _duration = event;
-        });
-      });
-      _audioPlayer.onPositionChanged.listen((event) {
-        setState(() {
-          _position = event;
-        });
-      });
-      _audioPlayer.onPlayerComplete.listen((event) {
-        if (!isLoop) {
-          nextMedia();
-        } else {
-          _position = const Duration();
-        }
-      });
-    });
-
-    _pageController.addListener(() {
-      setState(() {
-        currentPage = _pageController.page ?? 0.0;
-      });
-    });
+    c.initState(context, this);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
       return Container(
@@ -211,80 +108,40 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                     trackVisibility: true,
                     thickness: 3,
                     thumbVisibility: true,
-                    controller: _genreScrollController,
-                    child: ListView.builder(
-                        controller: _genreScrollController,
-                        itemCount: genreList.length,
+                    controller: c.genreScrollController,
+                    child: Obx(() => ListView.builder(
+                        controller: c.genreScrollController,
+                        itemCount: c.genreList.length,
                         itemBuilder: (context, index) {
-                          if (index >= genreList.length) {
+                          if (index >= c.genreList.length) {
                             return const SizedBox();
                           }
-                          Genre genreIndex = genreList[index];
+                          Genre genreIndex = c.genreList[index];
                           return ListTile(
                             title: AnimatedContainer(
-                              duration: const Duration(milliseconds: 900),
+                              duration: const Duration(milliseconds: 200),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: selectedGenreList.contains(genreIndex)
-                                      ? Colors.cyan
-                                      : Colors.transparent),
+                                  color:
+                                      c.selectedGenreList.contains(genreIndex)
+                                          ? Colors.cyan
+                                          : Colors.transparent),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(genreIndex.name ?? "No-Name Genre",
                                     style: GoogleFonts.orbitron(
                                         fontSize: 14,
-                                        color:
-                                            selectedGenreList.contains(genreIndex)
-                                                ? Colors.black87
-                                                : Colors.cyan)),
+                                        color: c.selectedGenreList
+                                                .contains(genreIndex)
+                                            ? Colors.black87
+                                            : Colors.cyan)),
                               ),
                             ),
-                            onTap: (() {
-                              bool removed = false;
-                              for (int i = 0; i < selectedGenreList.length; i++) {
-                                if (selectedGenreList[i].id == genreIndex.id) {
-                                  selectedGenreList.removeAt(i);
-                                  removed = true;
-                                  break;
-                                }
-                              }
-                              if (!removed) {
-                                selectedGenreList.add(genreIndex);
-                              }
-                              page = 0;
-                              mediaGenreServiceGridCall(
-                                      context,
-                                      mediaGenreServiceGridRequest(
-                                          page, selectedGenreList))
-                                  .then((List<MediaGenre> responseValue) {
-                                setState(() {
-                                  if (_audioPlayer.state == PlayerState.playing) {
-                                    _audioPlayer.stop();
-                                    _audioPlayer.state = PlayerState.stopped;
-                                    _startButtonAnimationController.reverse();
-                                  }
-                                  _pageController.animateToPage(0,
-                                      duration: const Duration(milliseconds: 900),
-                                      curve: Curves.easeIn);
-                                  _scrollController.animateTo(0,
-                                      duration: const Duration(milliseconds: 900),
-                                      curve: Curves.easeIn);
-
-                                  _position = const Duration();
-                                  _duration = const Duration();
-                                  mediaList = [];
-                                  mediaList.addAll(responseValue
-                                      .map((e) => e.media!)
-                                      .toList());
-
-                                  if (mediaList.isNotEmpty) {
-                                    media = mediaList[0];
-                                  }
-                                });
-                              });
-                            }),
+                            onTap: (() =>
+                                c.genreListOnClick(context, genreIndex)),
                           );
                         }),
+                    ),
                   )),
               Flexible(
                 flex: 9,
@@ -293,29 +150,29 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                   trackVisibility: true,
                   thickness: 3,
                   thumbVisibility: true,
-                  controller: _scrollController,
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: mediaList.length,
+                  controller: c.scrollController,
+                  child: Obx(() => ListView.builder(
+                      controller: c.scrollController,
+                      itemCount: c.mediaList.length,
                       itemBuilder: (context, index) {
-                        if (index >= mediaList.length) {
+                        if (index >= c.mediaList.length) {
                           return const SizedBox();
                         }
-                        Media mediaIndex = mediaList[index];
-                        return AnimatedContainer(
+                        Media mediaIndex = c.mediaList[index];
+                        return Obx(() => AnimatedContainer(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              color: media?.id == mediaIndex.id
+                              color: c.media?.value.id == mediaIndex.id
                                   ? Colors.cyan
                                   : Colors.transparent),
-                          duration: const Duration(milliseconds: 900),
+                          duration: const Duration(milliseconds: 200),
                           child: ListTile(
                             title: Text(
                               mediaIndex.name ?? "No-Name Music",
                               style: GoogleFonts.orbitron(
                                   fontSize: 14,
-                                  color: media?.id == mediaIndex.id
-                                      ? Colors.black87
+                                  color: c.media?.value.id == mediaIndex.id
+                                      ? Colors.black
                                       : Colors.cyan,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -323,8 +180,8 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                               imageUrl: mediaIndex.mediaImage?.id != null
                                   ? getCodenfastMediaUrl(
                                       mediaIndex.mediaImage?.id)
-                                  : getCodenfastMediaUrl(
-                                      mediaIndex.mediaDownloadSource?.image?.id),
+                                  : getCodenfastMediaUrl(mediaIndex
+                                      .mediaDownloadSource?.image?.id),
                               height: 172.0,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) =>
@@ -341,25 +198,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                             isThreeLine: true,
                             trailing: null,
                             //const Icon(Icons.download, color: Colors.white70,),
-                            onTap: (() {
-                              if (_audioPlayer.state == PlayerState.playing) {
-                                _audioPlayer.stop();
-                                _audioPlayer.state = PlayerState.stopped;
-                                _startButtonAnimationController.reverse();
-                              }
-                              _pageController.animateToPage(index,
-                                  duration: const Duration(milliseconds: 900),
-                                  curve: Curves.easeIn);
-                              media = mediaList[index];
-                              _position = const Duration();
-                              _duration = const Duration();
-                              Source source =
-                                  UrlSource(getCodenfastMediaUrl(media!.id));
-                              _audioPlayer.play(source,
-                                  position: _position,
-                                  mode: PlayerMode.mediaPlayer);
-                              _startButtonAnimationController.forward();
-                            }),
+                            onTap: (() => c.mediaListOnClick(index)),
                             onLongPress: (() async {
                               if (mediaIndex.attributionLink == null) {
                                 return;
@@ -367,8 +206,9 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                               launchUrl(Uri.parse(mediaIndex.attributionLink!));
                             }),
                           ),
+                          ),
                         );
-                      }),
+                      }), ),
                 ),
               ),
             ],
@@ -426,63 +266,49 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: AnimatedContainer(
+        child: Obx(() => AnimatedContainer(
           duration: const Duration(seconds: 1),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
+          decoration:  BoxDecoration(
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(50), topRight: Radius.circular(50)),
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  if (_audioPlayer.state != PlayerState.playing) Colors.black,
-                  if (_audioPlayer.state != PlayerState.playing)
+                  if (c.audioPlayer.value.state != PlayerState.playing)
+                    Colors.black,
+                  if (c.audioPlayer.value.state != PlayerState.playing)
                     Colors.blueGrey,
-                  if (_audioPlayer.state == PlayerState.playing)
-                    colorList[(DateTime.now().second - 1) % colorList.length],
-                  if (_audioPlayer.state == PlayerState.playing)
-                    colorList[DateTime.now().second % colorList.length],
-                  if (_audioPlayer.state == PlayerState.playing)
-                    colorList[(DateTime.now().second + 2) % colorList.length],
+                  if (c.audioPlayer.value.state == PlayerState.playing)
+                    colorList[(c.position.value.inSeconds - 1) % colorList.length],
+                  if (c.audioPlayer.value.state == PlayerState.playing)
+                    colorList[c.position.value.inSeconds % colorList.length],
+                  if (c.audioPlayer.value.state == PlayerState.playing)
+                    colorList[(c.position.value.inSeconds + 2) % colorList.length],
                 ]),
           ),
           child: Stack(children: [
-            PageView.builder(
-              controller: _pageController,
+             PageView.builder(
+              controller: c.pageController,
               scrollDirection: Axis.horizontal,
-              itemCount: mediaList.length,
-              onPageChanged: (page) {
-                setState(() {
-                  int currentPage = page.toInt();
-                  if (_audioPlayer.state == PlayerState.playing) {
-                    _audioPlayer.stop();
-                    _startButtonAnimationController.reverse();
-                  }
-                  media = mediaList[currentPage];
-                  _position = const Duration();
-                  _duration = const Duration();
-                  if (_audioPlayer.state != PlayerState.stopped &&
-                      _audioPlayer.state != PlayerState.paused) {
-                    Source source = UrlSource(getCodenfastMediaUrl(media!.id));
-                    _audioPlayer.play(source,
-                        position: _position, mode: PlayerMode.mediaPlayer);
-                    _startButtonAnimationController.forward();
-                    return;
-                  }
-                });
-              },
+              itemCount: c.mediaList.length,
+              physics: const NeverScrollableScrollPhysics(),
+              // onPageChanged: (page) => c.onPageChanged(page),
               itemBuilder: (context, index) {
-                Media media = mediaList[index];
-                return MusicCard(
-                    media: media, currentIdx: index, currentPage: currentPage);
+                Media media = c.mediaList[index];
+                return Obx(() => MusicCard(
+                    media: media,
+                    currentIdx: index,
+                    currentPage: c.currentPage.value!),
+                );
               },
             ),
-            if (media != null)
+            if (c.media != null)
               Container(
                 alignment: Alignment.topLeft,
                 margin: const EdgeInsets.only(left: 5, top: 20),
-                child: Text(
-                  "Music: ${turkishToEnglishLetters(media!.name ?? "No-Name Music")}",
+                child: Obx(() => Text(
+                  "Music: ${turkishToEnglishLetters(c.media!.value.name ?? "No-Name Music")}",
                   style: GoogleFonts.orbitron(
                       textStyle: const TextStyle(
                           color: Colors.cyanAccent,
@@ -496,12 +322,13 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                             spreadRadius: 10)
                       ]),
                 ),
+                ),
               ),
-            if (media != null && media!.attributionText != null)
+            if (c.media != null && c.media!.value.attributionText != null)
               Container(
                   alignment: Alignment.topLeft,
                   margin: const EdgeInsets.only(left: 5, top: 50),
-                  child: Text(media!.attributionText!,
+                  child: Obx(() => Text(c.media!.value.attributionText!,
                       style: GoogleFonts.orbitron(
                           textStyle: const TextStyle(
                               color: Colors.cyanAccent,
@@ -513,16 +340,16 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                 offset: Offset(0, 2),
                                 blurRadius: 6,
                                 spreadRadius: 10)
-                          ]))),
-            if (media != null && media!.attributionLink != null)
+                          ])))),
+            if (c.media != null && c.media!.value.attributionLink != null)
               Container(
                   alignment: Alignment.bottomLeft,
                   margin: const EdgeInsets.only(left: 5, bottom: 20),
                   child: InkWell(
                     onTap: () {
-                      launchUrl(Uri.parse(media!.attributionLink!));
+                      launchUrl(Uri.parse(c.media!.value.attributionLink!));
                     },
-                    child: Text(media!.attributionLink!,
+                    child: Obx(() =>Text(c.media!.value.attributionLink!,
                         style: GoogleFonts.orbitron(
                             textStyle: const TextStyle(
                                 color: Colors.cyanAccent,
@@ -534,14 +361,14 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                   offset: Offset(0, 2),
                                   blurRadius: 6,
                                   spreadRadius: 10)
-                            ])),
+                            ]))),
                   )),
-            if (media != null)
+            if (c.media != null)
               Container(
                 alignment: Alignment.bottomRight,
                 margin: const EdgeInsets.all(5),
-                child: Text(
-                  "${_position.toString().split('.').first.padLeft(8, "0")}/${_duration.toString().split('.').first.padLeft(8, "0")}",
+                child: Obx(() =>Text(
+                  "${c.position.toString().split('.').first.padLeft(8, "0")}/${c.duration.toString().split('.').first.padLeft(8, "0")}",
                   style: GoogleFonts.orbitron(
                       textStyle: const TextStyle(
                           color: Colors.cyanAccent,
@@ -555,8 +382,10 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                             spreadRadius: 10)
                       ]),
                 ),
+                ),
               ),
           ]),
+        ),
         ),
       ),
     );
@@ -588,7 +417,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                 blurRadius: 3,
                 spreadRadius: 1),
           ]),
-      child: slider(),
+      child: Obx(() => slider(),),
     );
   }
 
@@ -656,37 +485,8 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(width: 2.0, color: Colors.black),
-                      gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black38,
-                            Colors.black,
-                          ]),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.white38,
-                            offset: Offset(0, -2),
-                            blurRadius: 12,
-                            spreadRadius: -12),
-                        BoxShadow(
-                            color: Colors.black38,
-                            offset: Offset(0, 4),
-                            blurRadius: 12,
-                            spreadRadius: -12),
-                      ]),
-                  child: stopButton(),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AnimatedContainer(
+                child: Obx(() => AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(width: 2.0, color: Colors.black),
@@ -699,8 +499,10 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                           ]),
                       boxShadow: [
                         BoxShadow(
-                            color: ((_audioPlayer.state == PlayerState.playing && DateTime.now().second % 2 == 0)
-                                ? Colors.cyan : Colors.transparent),
+                            color: ((c.audioPlayer.value.state ==
+                                PlayerState.stopped)
+                                ? Colors.cyan
+                                : Colors.transparent),
                             offset: const Offset(0, 0),
                             blurRadius: 12,
                             spreadRadius: 2),
@@ -715,16 +517,15 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                             blurRadius: 12,
                             spreadRadius: -12),
                       ]),
-                  duration: const Duration(milliseconds: 999),
-                  child: Container(
-                      alignment: Alignment.center, child: startButton()),
+                  child: stopButton(),
+                ),
                 ),
               ),
             ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
+                child: Obx(() => AnimatedContainer(
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(width: 2.0, color: Colors.black),
@@ -735,19 +536,69 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                             Colors.black38,
                             Colors.black,
                           ]),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
+                            color: ((c.audioPlayer.value.state ==
+                                        PlayerState.playing &&
+                                    c.position.value.inSeconds % 2 == 0)
+                                ? Colors.cyan
+                                : Colors.transparent),
+                            offset: const Offset(0, 0),
+                            blurRadius: 12,
+                            spreadRadius: 2),
+                        const BoxShadow(
                             color: Colors.white38,
                             offset: Offset(0, -2),
                             blurRadius: 12,
                             spreadRadius: -12),
+                        const BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(0, 4),
+                            blurRadius: 12,
+                            spreadRadius: -12),
+                      ]),
+                  duration: const Duration(seconds: 1),
+                  child: Container(
+                      alignment: Alignment.center, child: startButton()),
+                ),),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Obx(() => AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 2.0, color: Colors.black),
+                      gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black38,
+                            Colors.black,
+                          ]),
+                      boxShadow: [
                         BoxShadow(
+                            color: ((c.isLoop.isTrue)
+                                ? Colors.cyan
+                                : Colors.transparent),
+                            offset: const Offset(0, 0),
+                            blurRadius: 12,
+                            spreadRadius: 2),
+                        const BoxShadow(
+                            color: Colors.white38,
+                            offset: Offset(0, -2),
+                            blurRadius: 12,
+                            spreadRadius: -12),
+                        const BoxShadow(
                             color: Colors.black38,
                             offset: Offset(0, 4),
                             blurRadius: 12,
                             spreadRadius: -12),
                       ]),
                   child: loopButton(),
+                ),
                 ),
               ),
             ),
@@ -789,76 +640,21 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget startButton() {
     return IconButton(
-      onPressed: () {
-        setState(() {
-          if (_audioPlayer.state == PlayerState.playing) {
-            _audioPlayer.pause();
-            _startButtonAnimationController.reverse();
-          } else if (_position.inSeconds != 0) {
-            _audioPlayer.play(UrlSource(getCodenfastMediaUrl(media!.id)),
-                position: _position, mode: _playerMode);
-            _startButtonAnimationController.forward();
-          } else if (_audioPlayer.state != PlayerState.playing) {
-            _position = const Duration();
-            _audioPlayer.play(UrlSource(getCodenfastMediaUrl(media!.id)),
-                position: _position, mode: _playerMode);
-            _startButtonAnimationController.forward();
-          }
-        });
-      },
+      onPressed: () => c.startButtonOnClick(),
       iconSize: 40,
       icon: AnimatedIcon(
         icon: AnimatedIcons.play_pause,
-        progress: _startButtonAnimationController,
-        color: Colors.cyan,
+        progress: c.startButtonAnimationController,
+        color: c.audioPlayer.value.state == PlayerState.playing ? Colors.cyan
+         : Colors.grey,
       ),
-      // Icon(
-      //   Icons.play_circle_fill,
-      //   color: _audioPlayer.state == PlayerState.playing
-      //       ? colorList[DateTime.now().second % colorList.length]
-      //       : Colors.grey,
-      //   shadows: [
-      //     if (_audioPlayer.state == PlayerState.playing)
-      //       BoxShadow(
-      //           color: colorList[DateTime.now().second % colorList.length],
-      //           offset: const Offset(0, 0),
-      //           blurRadius: 5,
-      //           spreadRadius: 12),
-      //   ],
-      // ),
     );
   }
 
   Widget previousButton() {
     return IconButton(
         iconSize: 40,
-        onPressed: () {
-          setState(() {
-            int currentPage = (_pageController.page ?? 0).toInt();
-            if (currentPage <= 0) {
-              return;
-            }
-            if (_audioPlayer.state == PlayerState.playing) {
-              _audioPlayer.stop();
-              _startButtonAnimationController.reverse();
-            }
-            int newPage = (currentPage - 1).toInt();
-            _pageController.animateToPage(newPage,
-                duration: const Duration(milliseconds: 900),
-                curve: Curves.easeIn);
-            media = mediaList[newPage];
-            _position = const Duration();
-            _duration = const Duration();
-            if (_audioPlayer.state != PlayerState.stopped &&
-                _audioPlayer.state != PlayerState.paused) {
-              Source source = UrlSource(getCodenfastMediaUrl(media!.id));
-              _audioPlayer.play(source,
-                  position: _position, mode: PlayerMode.mediaPlayer);
-              _startButtonAnimationController.forward();
-              return;
-            }
-          });
-        },
+        onPressed: () => c.previousButtonOnClick(),
         icon: const Icon(
           Icons.fast_rewind,
           color: Colors.grey,
@@ -869,87 +665,47 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
     return IconButton(
         iconSize: 40,
         onPressed: () {
-          nextMedia();
+          c.nextMedia();
         },
         icon: const Icon(
           Icons.fast_forward,
           color: Colors.grey,
-        ));
-  }
-
-  void nextMedia() {
-    setState(() {
-      int currentPage = (_pageController.page ?? 0).toInt();
-      int newPage = (currentPage + 1).toInt();
-      if (newPage >= mediaList.length) {
-        return;
-      }
-      if (_audioPlayer.state == PlayerState.playing) {
-        _audioPlayer.stop();
-        _startButtonAnimationController.reverse();
-      }
-      _pageController.animateToPage(newPage,
-          duration: const Duration(milliseconds: 900), curve: Curves.easeIn);
-      media = mediaList[newPage];
-      _position = const Duration();
-      _duration = const Duration();
-      if (_audioPlayer.state != PlayerState.stopped &&
-          _audioPlayer.state != PlayerState.paused) {
-        Source source = UrlSource(getCodenfastMediaUrl(media!.id));
-        _audioPlayer.play(source,
-            position: _position, mode: PlayerMode.mediaPlayer);
-        _startButtonAnimationController.forward();
-        return;
-      }
-    });
+        ),
+    );
   }
 
   Widget loopButton() {
     return IconButton(
         iconSize: 40,
-        onPressed: () {
-          setState(() {
-            isLoop = !isLoop;
-            if (isLoop) {
-              _audioPlayer.setReleaseMode(ReleaseMode.loop);
-            } else {
-              _audioPlayer.setReleaseMode(ReleaseMode.release);
-            }
-          });
-        },
+        onPressed: () => c.loopButtonOnClick(),
         icon: Icon(
           Icons.loop,
-          color: isLoop ? Colors.blue : Colors.grey,
+          color: c.isLoop.isTrue ? Colors.cyan : Colors.grey,
           shadows: [
-            if (isLoop)
+            if (c.isLoop.isTrue)
               const BoxShadow(
-                  color: Colors.blue,
+                  color: Colors.cyan,
                   offset: Offset(0, 0),
                   blurRadius: 5,
                   spreadRadius: 12),
           ],
-        ));
+    ),
+    );
+
   }
 
   Widget stopButton() {
     return IconButton(
       iconSize: 40,
-      onPressed: () {
-        setState(() {
-          _audioPlayer.stop();
-          _startButtonAnimationController.reverse();
-          _position = const Duration(milliseconds: 0);
-          _audioPlayer.state = PlayerState.stopped;
-        });
-      },
+      onPressed: () => c.stopButtonOnClick(),
       icon: Icon(Icons.stop,
-          color: _audioPlayer.state == PlayerState.stopped
-              ? Colors.blue
+          color: c.audioPlayer.value.state == PlayerState.stopped
+              ? Colors.cyan
               : Colors.grey,
           shadows: [
-            if (_audioPlayer.state == PlayerState.stopped)
+            if (c.audioPlayer.value.state == PlayerState.stopped)
               const BoxShadow(
-                  color: Colors.blue,
+                  color: Colors.cyan,
                   offset: Offset(0, 0),
                   blurRadius: 5,
                   spreadRadius: 12),
@@ -958,24 +714,17 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
   }
 
   Widget slider() {
-    return _position.inSeconds.toDouble() >= 0 &&
-            _position.inSeconds.toDouble() <= _duration.inSeconds.toDouble()
+    return c.position.value.inSeconds.toDouble() >= 0 &&
+            c.position.value.inSeconds.toDouble() <=
+                c.duration.value.inSeconds.toDouble()
         ? Slider(
-            activeColor: _duration.inSeconds > 0 ? Colors.cyan : Colors.grey,
+            activeColor:
+                c.duration.value.inSeconds > 0 ? Colors.cyan : Colors.grey,
             inactiveColor: Colors.grey,
-            value: _position.inSeconds.toDouble(),
+            value: c.position.value.inSeconds.toDouble(),
             min: 0,
-            max: _duration.inSeconds.toDouble(),
-            onChanged: (double value) {
-              if (_duration.inSeconds < 1) {
-                return;
-              }
-              setState(() {
-                _position = Duration(seconds: value.toInt());
-                _audioPlayer.seek(_position);
-              });
-            },
-          )
+            max: c.duration.value.inSeconds.toDouble(),
+            onChanged: (double value) => c.sliderOnChanged(value))
         : const SizedBox();
   }
 }
