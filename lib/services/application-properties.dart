@@ -1,5 +1,5 @@
 library applicationProperties;
-String baseUrl = "http://app.codenfast.com";
+String baseUrl = "http://85.105.13.152";
 String? applicationLogo = null;
 String applicationBanner = "Please Wait";
 String? applicationUrl = null;

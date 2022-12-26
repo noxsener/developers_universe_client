@@ -21,7 +21,7 @@ bool appCanHttps = false;
 
 DateFormat dateFormat = DateFormat("dd.MM.yyyy");
 DateFormat dateFormatDetailed = DateFormat("dd.MM.yyyy HH:mm:ss");
-DateFormat onlyTime = DateFormat("HH:mm:ss");
+DateFormat dateFormatOnlyTime = DateFormat("HH:mm:ss");
 DateFormat iso8601WithZone = DateFormat("yyyy-MM-ddTHH:mm:ssZ","en-US");
 NumberFormat moneyFormat = NumberFormat("#.00");
 Locale locale = const Locale("en");
@@ -30,6 +30,7 @@ RegExp integerRegex = RegExp(r"^[0-9]*$", caseSensitive: true, multiLine: false)
 RegExp imageRegex = RegExp(r".*(jpg|jpeg|png|webp|gif)", caseSensitive: false);
 
 CodenfastTheme theme = CodenfastTheme();
+DateTime? time;
 
 String uaaServiceLogin = "/uaa/login";
 
@@ -80,7 +81,8 @@ List<Color> colorList = [
   const Color(0xFF4e342e)
 ];
 
-class DataContext {
+DateTime get now {
+  return time != null ? time!.toUtc() :  DateTime.now().toUtc();
 }
 
 class CodenfastPageRoute extends MaterialPageRoute {

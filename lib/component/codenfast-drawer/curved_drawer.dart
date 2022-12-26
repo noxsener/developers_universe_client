@@ -16,6 +16,8 @@ class CurvedDrawer extends StatefulWidget {
   final Color buttonBackgroundColor;
   //color of the text and icons in the drawer
   final Color labelColor;
+  //color of the text and icons in the drawer
+  final List<Shadow>? shadows;
   //color behind the curve
   final Color backgroundColor;
   //function to be executed on nav item tapped
@@ -37,9 +39,10 @@ class CurvedDrawer extends StatefulWidget {
       this.color = Colors.white,
       this.buttonBackgroundColor = Colors.white,
       this.labelColor = Colors.black54,
+      this.shadows,
       this.backgroundColor = Colors.transparent,
       required this.onTap,
-      this.animationCurve = Curves.easeOut,
+      this.animationCurve = Curves.easeInOut,
       this.animationDuration = const Duration(milliseconds: 600),
       this.width = 75,
       this.isEndDrawer = false})
@@ -71,6 +74,7 @@ class _CurvedDrawerState extends State<CurvedDrawer>
           icon: item.icon,
           label: item.label,
           color: widget.labelColor,
+
           background: widget.buttonBackgroundColor,
           size: widget.width / 3,
         );
@@ -207,10 +211,10 @@ class _CurvedDrawerState extends State<CurvedDrawer>
 class DrawerItem {
   final String label;
   final Icon icon;
-  final Function onTap;
+  final Function? onTap;
   const DrawerItem({
     required this.label,
     required this.icon,
-    required this.onTap
+    this.onTap
   });
 }

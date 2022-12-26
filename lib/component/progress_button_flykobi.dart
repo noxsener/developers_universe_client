@@ -93,12 +93,12 @@ class ProgressButton extends StatefulWidget {
     Function? onPressed,
     ButtonState? state = ButtonState.idle,
     Function? animationEnd,
-    maxWidth: 170,
-    minWidth: 58,
-    height: 53,
-    radius: 100,
-    progressIndicatorSize: 35,
-    double iconPadding: 4,
+    maxWidth = 170,
+    minWidth = 58,
+    height = 53,
+    radius = 100,
+    progressIndicatorSize = 35,
+    double iconPadding = 4,
     TextStyle? textStyle,
     CircularProgressIndicator? progressIndicator,
     MainAxisAlignment? progressIndicatorAlignment,
@@ -164,7 +164,7 @@ class _ProgressButtonState extends State<ProgressButton>
     }
     colorAnimation = ColorTween(begin: begin, end: end).animate(CurvedAnimation(
       parent: colorAnimationController!,
-      curve: Interval(
+      curve: const Interval(
         0,
         1,
         curve: Curves.easeIn,
@@ -194,7 +194,7 @@ class _ProgressButtonState extends State<ProgressButton>
     progressIndicator = widget.progressIndicator ??
         CircularProgressIndicator(
             backgroundColor: widget.stateColors[widget.state!],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white));
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white));
   }
 
   @override
@@ -220,9 +220,9 @@ class _ProgressButtonState extends State<ProgressButton>
         mainAxisAlignment: widget.progressIndicatorAlignment,
         children: <Widget>[
           SizedBox(
-            child: progressIndicator,
             width: widget.progressIndicatorSize.toDouble(),
             height: widget.progressIndicatorSize.toDouble(),
+            child: progressIndicator,
           ),
           buttonChild ?? Container(),
           Container()
@@ -231,7 +231,7 @@ class _ProgressButtonState extends State<ProgressButton>
     }
     return AnimatedOpacity(
         opacity: visibility ? 1 : 0,
-        duration: Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 250),
         child: buttonChild);
   }
 
@@ -248,7 +248,7 @@ class _ProgressButtonState extends State<ProgressButton>
               padding: widget.padding,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(widget.radius.toDouble()),
-                  side: BorderSide(color: Colors.transparent, width: 0)),
+                  side: const BorderSide(color: Colors.transparent, width: 0)),
               color: backgroundColor,
               onPressed: widget.onPressed as void Function()?,
               child: getButtonChild(

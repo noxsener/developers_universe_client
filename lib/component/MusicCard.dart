@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:developersuniverse_client/services/connection-service.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/common-model.dart';
+import '../webservices/audio-playlist-manager-service.dart';
 
 class MusicCard extends StatelessWidget {
   final Media media;
@@ -29,7 +30,15 @@ class MusicCard extends StatelessWidget {
               image: DecorationImage(
               fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(
-                    media.mediaImage?.id != null ? getCodenfastMediaUrl(media.mediaImage!.id) : getCodenfastMediaUrl(media.mediaDownloadSource?.image?.id),
+                    media
+                        .mediaImage?.downloadedUrl !=
+                        null
+                        ? media.mediaImage!.downloadedUrl!
+                        : media.mediaImage?.id != null
+                        ? getCodenfastMediaUrl(
+                        media.mediaImage?.id)
+                        : getCodenfastMediaUrl(media
+                        .mediaDownloadSource?.image?.id),
                   ),
               )
             ),

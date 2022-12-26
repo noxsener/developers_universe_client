@@ -54,7 +54,7 @@ class Table extends StatefulWidget {
       const SizedBox(
         width: 60,
         height: 60,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(color: Colors.cyan,),
       ),
       Padding(
         padding: const EdgeInsets.only(top: 16),

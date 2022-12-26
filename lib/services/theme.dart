@@ -5,10 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CodenfastTheme {
 
-  Color backGroundColor1 = const Color(0xFF6A1B9A);
-  Color backGroundColor2 = const Color(0xFFC10685);
-  Color backGroundColor3 = const Color(0xFFF44169);
-  Color backGroundColor4 = const Color(0xFFFF8051);
+  // Color backGroundColor1 = const Color(0xFF6A1B9A);
+  // Color backGroundColor2 = const Color(0xFFC10685);
+  // Color backGroundColor3 = const Color(0xFFF44169);
+  // Color backGroundColor4 = const Color(0xFFFF8051);
+  Color backGroundColor1 = const Color(0xFF222222);
+  Color backGroundColor2 = const Color(0xFF212121);
+  Color backGroundColor3 = const Color(0xFF121212);
+  Color backGroundColor4 = const Color(0xFF111111);
 
   int animationDuration = 500;
   Color iconColor = const Color(0xFF000000);
@@ -40,7 +44,7 @@ class CodenfastTheme {
 
   List<BoxShadow> shadow() {
     return [
-      const BoxShadow(color: Colors.black, offset: Offset(0, 3), blurRadius: 6)
+      const BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
     ];
   }
 

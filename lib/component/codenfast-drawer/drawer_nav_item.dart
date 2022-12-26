@@ -5,6 +5,7 @@ class DrawerNavItem extends StatelessWidget {
   final String label;
   final double size;
   final Color color;
+  final List<BoxShadow>? shadows;
   final Color background;
 
   const DrawerNavItem(
@@ -13,6 +14,7 @@ class DrawerNavItem extends StatelessWidget {
       this.label = "",
       this.size = 25.0,
       this.color = Colors.black54,
+      this.shadows,
       this.background = Colors.white})
       : super(key: key);
 
@@ -31,10 +33,10 @@ class DrawerNavItem extends StatelessWidget {
           children: label.isNotEmpty
               ? <Widget>[
                   Icon(icon.icon, size: size, color: color),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
                     label,
-                    style: TextStyle(color: color),
+                    style: TextStyle(color: color, shadows: shadows),
                   ),
                 ]
               : <Widget>[

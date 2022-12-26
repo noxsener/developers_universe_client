@@ -1,44 +1,84 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:developersuniverse_client/services/common-service.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:http_parser/src/media_type.dart';
+import 'package:intl/intl.dart';
 
 import '../models/common-model.dart';
 import 'application-properties.dart';
 
-typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
+String get keyString {
+  return '4bc2059c4cf54aca96e4413a93a0fdsq';
+}
+
+const String aHeader = "time";
+DateFormat dateFormatPlain = DateFormat("ddMMyyyyHHmmss");
 
 class HClient {
+  String getIvString(String data) {
+    return '${data}0${data.substring(data.length - 1)}';
+  }
+
+  String encryptAES(String ivString, String plainText) {
+    final key = encrypt.Key.fromUtf8(keyString);
+    final iv = encrypt.IV.fromUtf8(ivString);
+    final encrypter =
+        encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.ctr));
+    encrypt.Encrypted? encrypted =
+        encrypter.encryptBytes(utf8.encode(plainText), iv: iv);
+    return base64Encode(encrypted.bytes);
+  }
+
+  String decryptAES(String ivString, String plainText) {
+    final key = encrypt.Key.fromUtf8(keyString);
+    final iv = encrypt.IV.fromUtf8(getIvString(ivString));
+    final encrypter =
+        encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.ctr));
+    return encrypter.decrypt(encrypt.Encrypted.fromBase64(plainText), iv: iv);
+  }
+
   Map<String, String> getDefaultHeaders() {
-    Map<String, String> headers = {"Content-Type": "application/json"};
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      aHeader: dateFormatDetailed.format(now)
+    };
     return headers;
   }
 
-  Future<Response> get(String path, {Map<String, String>? headers}) async {
+  Map<String, String> getDefaultHeadersCrypted(String iv, {Map<String, String>? headers}) {
+    headers ??= {"Content-Type": "text/plain"};
+    headers[aHeader] = iv;
+    return headers;
+  }
+
+  Future<http.Response> get(String path, {Map<String, String>? headers}) async {
     Uri url = Uri.parse(baseUrl + path);
     return http.get(url,
         headers: (headers != null) ? headers : getDefaultHeaders());
   }
 
-  Future<Response> post(String path, String? json,
+  Future<http.Response> post(String path, JsonConvertable? object,
       {Map<String, String>? headers}) async {
+    String data = dateFormatPlain.format(now.toUtc());
+    String iv = getIvString(data);
+    String? json;
+    if (object != null) {
+      json = encryptAES(iv, jsonEncode(object.toJson()));
+    }
+    headers = getDefaultHeadersCrypted(data, headers: headers);
     Uri url = Uri.parse(baseUrl + path);
-    return http.post(url,body: json, headers: (headers != null) ? headers : getDefaultHeaders());
+    return http.post(url, body: json, headers: headers);
   }
 
-  Future<http.StreamedResponse> downloadFile(
-      String path,
-      String kurumId,
-      String entityType,
-      String entityId,
-      String fileName,
-      String dosyaId,
+  Future<http.StreamedResponse> downloadFile(String path, String kurumId,
+      String entityType, String entityId, String fileName, String dosyaId,
       {Map<String, String>? headers}) async {
-    Uri url = Uri.parse('$baseUrl$path/$kurumId/$entityType/$entityId/$fileName/$dosyaId');
+    Uri url = Uri.parse(
+        '$baseUrl$path/$kurumId/$entityType/$entityId/$fileName/$dosyaId');
     // return http.post(url, body: json, headers: (headers != null) ? headers : getDefaultHeaders());
     return await http.Client().send(http.Request('GET', url));
   }
@@ -54,14 +94,14 @@ class HClient {
       {Map<String, String>? headers}) async {
     Uri url = Uri.parse(baseUrl + path);
     // return http.post(url, body: json, headers: (headers != null) ? headers : getDefaultHeaders());
-    MultipartRequest request = http.MultipartRequest("POST", url);
+    http.MultipartRequest request = http.MultipartRequest("POST", url);
     request.fields["kurumId"] = kurumId;
-    if(isletmeId != null) {
+    if (isletmeId != null) {
       request.fields["isletmeId"] = isletmeId;
     }
     request.fields["kullaniciId"] = kullaniciId;
     request.fields["entityType"] = entityType;
-    if(entityId != null) {
+    if (entityId != null) {
       request.fields["entityId"] = entityId;
     }
     for (PlatformFile file in fileList) {
@@ -74,7 +114,7 @@ class HClient {
     return request.send();
   }
 
-  Future<Response> requestGrid(String path, RequestGrid requestGrid,
+  Future<http.Response> requestGrid(String path, RequestGrid requestGrid,
       {Map<String, String>? headers}) async {
     Uri url = Uri.parse(baseUrl + path);
     String jsonRequest = jsonEncode(requestGrid.toJson());
@@ -83,14 +123,21 @@ class HClient {
         headers: (headers != null) ? headers : getDefaultHeaders());
   }
 
-  Future<Response> put(String path, String json,
+  Future<http.Response> put(String path, JsonConvertable? object,
       {Map<String, String>? headers}) async {
+    String data = dateFormatPlain.format(now.toUtc());
+    String iv = getIvString(data);
+    String? json;
+    if (object != null) {
+      json = encryptAES(iv, jsonEncode(object.toJson()));
+    }
+    headers = getDefaultHeadersCrypted(data, headers: headers);
     Uri url = Uri.parse(baseUrl + path);
-    return http.put(url,
-        body: json, headers: (headers != null) ? headers : getDefaultHeaders());
+    return http.put(url, body: json, headers: headers);
   }
 
-  Future<Response> delete(String path, {Map<String, String>? headers}) async {
+  Future<http.Response> delete(String path,
+      {Map<String, String>? headers}) async {
     Uri url = Uri.parse(baseUrl + path);
     return http.delete(url,
         headers: (headers != null) ? headers : getDefaultHeaders());

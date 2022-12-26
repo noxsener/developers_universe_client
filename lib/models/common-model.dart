@@ -1,6 +1,28 @@
+import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+part 'common-model.g.dart';
+// flutter packages pub run build_runner build
 
-class TableModel<T> {
+
+void registerHiveAdapters() {
+  // in common-model.g.dart, use regex "[ ][a-zA-Z0-9]*Adapter "
+  Hive.registerAdapter(MediaAdapter());
+  Hive.registerAdapter(MediaDownloadSourceAdapter());
+  Hive.registerAdapter(MediaFolderAdapter());
+  Hive.registerAdapter(DownloadIntentAdapter());
+  Hive.registerAdapter(DownloadPartAdapter());
+  Hive.registerAdapter(DownloadStatusAdapter());
+  Hive.registerAdapter(GenreAdapter());
+  Hive.registerAdapter(MediaGenreAdapter());
+}
+
+class JsonConvertable { // interface
+  Map<String, dynamic> toJson() {
+    throw UnimplementedError();
+  }
+}
+
+class TableModel<T> implements JsonConvertable {
   List<dynamic>? data = [];
   List<T> dataGeneric = [];
 
@@ -27,7 +49,8 @@ class TableModel<T> {
     }
   }
 
-  toJSON() {
+  @override
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['data'] = data;
     if (count != null) {
@@ -40,7 +63,7 @@ class TableModel<T> {
   }
 }
 
-class FilterParam {
+class FilterParam implements JsonConvertable {
   late String propertyName;
   late String filterType;
   late List<dynamic> filterValue;
@@ -59,6 +82,7 @@ class FilterParam {
     }
   }
 
+  @override
   toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['propertyName'] = propertyName;
@@ -68,7 +92,7 @@ class FilterParam {
   }
 }
 
-class RequestGrid {
+class RequestGrid implements JsonConvertable {
   List<String>? propertyList;
   List<FilterParam>? filters;
   int? page;
@@ -109,6 +133,7 @@ class RequestGrid {
     }
   }
 
+  @override
   toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if(propertyList != null) {
@@ -133,7 +158,35 @@ class RequestGrid {
   }
 }
 
-class ErrorObject {
+class ResponseEntity<T> {
+  String? status;
+  T? body;
+  HttpHeaders? headers;
+
+  ResponseEntity.fromJSON(Map<String, dynamic> json) {
+    if(json['body'] != null) {
+      body = json['body'];
+    }
+    if(json['status'] != null) {
+      status = json['status'];
+    }
+    if(json['headers'] != null) {
+      headers = HttpHeaders.fromJSON(json['headers']);
+    }
+  }
+}
+
+class HttpHeaders<K,V> {
+  Map<K, List<V>>? headers;
+
+  HttpHeaders.fromJSON(Map<String, dynamic> json) {
+    if(json['headers'] != null) {
+      headers = json['headers'];
+    }
+  }
+}
+
+class ErrorObject implements JsonConvertable {
   DateTime? timestamp;
   int? status;
   String? error;
@@ -160,6 +213,7 @@ class ErrorObject {
     }
   }
 
+  @override
   toJson(){
     final Map<String, dynamic> data = <String, dynamic>{};
     if(timestamp != null) {
@@ -181,7 +235,7 @@ class ErrorObject {
   }
 }
 
-class RequestObject {
+class RequestObject implements JsonConvertable {
   List<dynamic>? data;
 
   RequestObject({this.data});
@@ -192,6 +246,7 @@ class RequestObject {
     }
   }
 
+  @override
   toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['data'] = data;
@@ -199,34 +254,63 @@ class RequestObject {
   }
 }
 
-class Media {
-  String? artist;
-  String? attributionLink;
-  String? attributionSourceLink;
-  String? attributionText;
-  DateTime? createTime;
-  String? description;
-  DownloadIntent? downloadIntent;
-  List<DownloadPart>? downloadPartList;
-  String? downloadedUrl;
-  String? fileLocation;
-  String? fileName;
-  int? height;
+@HiveType(typeId: 0)
+class Media extends HiveObject implements JsonConvertable {
+  @HiveField(0)
   String? id;
+  @HiveField(1)
+  String? artist;
+  @HiveField(2)
+  String? attributionLink;
+  @HiveField(3)
+  String? attributionSourceLink;
+  @HiveField(4)
+  String? attributionText;
+  @HiveField(5)
+  DateTime? createTime;
+  @HiveField(6)
+  String? description;
+  @HiveField(7)
+  DownloadIntent? downloadIntent;
+  @HiveField(8)
+  List<DownloadPart>? downloadPartList;
+  @HiveField(9)
+  String? downloadedUrl;
+  @HiveField(10)
+  String? fileLocation;
+  @HiveField(11)
+  String? fileName;
+  @HiveField(12)
+  int? height;
+  @HiveField(13)
   List<Media>? imageOfMediaList;
+  @HiveField(14)
   bool? isPublic;
+  @HiveField(15)
   MediaDownloadSource? mediaDownloadSource;
+  @HiveField(16)
   Media? mediaImage;
+  @HiveField(17)
   int? mediaSize;
+  @HiveField(18)
   String? mimeType;
+  @HiveField(19)
   MultipartFile? multipartFile;
+  @HiveField(20)
   String? name;
+  @HiveField(21)
   bool? partialDownloadSupport;
+  @HiveField(22)
   bool? passive;
+  @HiveField(23)
   int? size;
+  @HiveField(24)
   DownloadStatus? status;
+  @HiveField(25)
   DateTime? updateTime;
+  @HiveField(26)
   int? width;
+  @HiveField(27)
   String? zipMimeType;
 
   Media({this.artist, this.attributionLink, this.attributionSourceLink, this.attributionText, this.createTime, this.description, this.downloadIntent, this.downloadPartList, this.downloadedUrl, this.fileLocation, this.fileName, this.height, this.id, this.imageOfMediaList, this.isPublic, this.mediaDownloadSource, this.mediaImage, this.mediaSize, this.mimeType, this.multipartFile, this.name, this.partialDownloadSupport, this.passive, this.size, this.status, this.updateTime, this.width, this.zipMimeType, });
@@ -300,6 +384,7 @@ class Media {
     }
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (artist != null) {
     data['artist'] = artist;
@@ -390,17 +475,29 @@ class Media {
 
 }
 
-class MediaDownloadSource {
+@HiveType(typeId: 1)
+class MediaDownloadSource extends HiveObject implements JsonConvertable {
+  @HiveField(0)
   DateTime? createTime;
+  @HiveField(1)
   String? description;
+  @HiveField(2)
   String? id;
+  @HiveField(3)
   Media? image;
+  @HiveField(4)
   String? name;
+  @HiveField(5)
   bool? passive;
+  @HiveField(6)
   String? siteName;
+  @HiveField(7)
   String? title;
+  @HiveField(8)
   String? type;
+  @HiveField(9)
   DateTime? updateTime;
+  @HiveField(10)
   String? url;
 
   MediaDownloadSource({this.createTime, this.description, this.id, this.image, this.name, this.passive, this.siteName, this.title, this.type, this.updateTime, this.url, });
@@ -437,6 +534,7 @@ class MediaDownloadSource {
     }
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (createTime != null) {
     data['createTime'] = createTime!.toIso8601String();
@@ -476,12 +574,19 @@ class MediaDownloadSource {
 
 }
 
-class MediaFolder {
+@HiveType(typeId: 2)
+class MediaFolder extends HiveObject implements JsonConvertable {
+  @HiveField(0)
   DateTime? createTime;
+  @HiveField(1)
   String? description;
+  @HiveField(2)
   String? id;
+  @HiveField(3)
   String? name;
+  @HiveField(4)
   bool? passive;
+  @HiveField(5)
   DateTime? updateTime;
 
   MediaFolder({this.createTime, this.description, this.id, this.name, this.passive, this.updateTime, });
@@ -503,6 +608,7 @@ class MediaFolder {
     updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (createTime != null) {
     data['createTime'] = createTime!.toIso8601String();
@@ -527,11 +633,17 @@ class MediaFolder {
 
 }
 
-class DownloadIntent {
+@HiveType(typeId: 3)
+class DownloadIntent extends HiveObject implements JsonConvertable {
+  @HiveField(0)
   DateTime? createTime;
+  @HiveField(1)
   String? id;
+  @HiveField(2)
   String? name;
+  @HiveField(3)
   bool? passive;
+  @HiveField(4)
   DateTime? updateTime;
 
   DownloadIntent({this.createTime, this.id, this.name, this.passive, this.updateTime, });
@@ -550,6 +662,7 @@ class DownloadIntent {
     updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (createTime != null) {
     data['createTime'] = createTime!.toIso8601String();
@@ -570,16 +683,28 @@ class DownloadIntent {
   }
 
 }
-class DownloadPart {
+
+@HiveType(typeId: 4)
+class DownloadPart implements JsonConvertable {
+  @HiveField(0)
   int? byteRangeEnd;
+  @HiveField(1)
   int? byteRangeStart;
+  @HiveField(2)
   DateTime? createTime;
+  @HiveField(3)
   String? id;
+  @HiveField(4)
   Media? media;
+  @HiveField(5)
   String? partFileName;
+  @HiveField(6)
   int? partNumber;
+  @HiveField(7)
   bool? passive;
+  @HiveField(8)
   DownloadStatus? status;
+  @HiveField(9)
   DateTime? updateTime;
 
   DownloadPart({this.byteRangeEnd, this.byteRangeStart, this.createTime, this.id, this.media, this.partFileName, this.partNumber, this.passive, this.status, this.updateTime, });
@@ -609,6 +734,7 @@ class DownloadPart {
     updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (byteRangeEnd != null) {
     data['byteRangeEnd'] = byteRangeEnd;
@@ -644,11 +770,18 @@ class DownloadPart {
   }
 
 }
-class DownloadStatus {
+
+@HiveType(typeId: 5)
+class DownloadStatus implements JsonConvertable {
+  @HiveField(0)
   DateTime? createTime;
+  @HiveField(1)
   String? id;
+  @HiveField(2)
   String? name;
+  @HiveField(3)
   bool? passive;
+  @HiveField(4)
   DateTime? updateTime;
 
   DownloadStatus({this.createTime, this.id, this.name, this.passive, this.updateTime, });
@@ -667,6 +800,7 @@ class DownloadStatus {
     updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (createTime != null) {
     data['createTime'] = createTime!.toIso8601String();
@@ -687,11 +821,18 @@ class DownloadStatus {
   }
 
 }
-class Genre {
+
+@HiveType(typeId: 6)
+class Genre implements JsonConvertable {
+  @HiveField(0)
   DateTime? createTime;
+  @HiveField(1)
   String? id;
+  @HiveField(2)
   String? name;
+  @HiveField(3)
   bool? passive;
+  @HiveField(4)
   DateTime? updateTime;
 
   Genre({this.createTime, this.id, this.name, this.passive, this.updateTime, });
@@ -710,6 +851,7 @@ class Genre {
     updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (createTime != null) {
     data['createTime'] = createTime!.toIso8601String;
@@ -731,12 +873,19 @@ class Genre {
 
 }
 
-class MediaGenre {
+@HiveType(typeId: 7)
+class MediaGenre extends HiveObject implements JsonConvertable {
+  @HiveField(0)
   DateTime? createTime;
+  @HiveField(1)
   String? id;
+  @HiveField(2)
   Media? media;
+  @HiveField(3)
   Genre? genre;
+  @HiveField(4)
   bool? passive;
+  @HiveField(5)
   DateTime? updateTime;
 
   MediaGenre({this.createTime, this.id, this.media, this.genre, this.passive, this.updateTime, });
@@ -754,6 +903,7 @@ class MediaGenre {
     updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
   }
 
+  @override
   toJson() {final Map<String, dynamic> data = <String, dynamic>{};
   if (createTime != null) {
     data['createTime'] = createTime!.toIso8601String;
