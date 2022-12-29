@@ -1,5 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+
+import '../services/common-service.dart';
 part 'common-model.g.dart';
 // flutter packages pub run build_runner build
 
@@ -251,6 +257,113 @@ class RequestObject implements JsonConvertable {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['data'] = data;
     return data;
+  }
+}
+
+class CodenfastMenu {
+  String title;
+  String? description;
+  String? image;
+  Widget? icon;
+  Function? onClick;
+  bool? visible;
+  List<CodenfastMenu>? items;
+
+  CodenfastMenu({required this.title, this.description, this.image, this.onClick, this.items, this.visible, this.icon});
+
+  Hero getHero() {
+    return Hero(
+      tag: title,
+      child: Row(
+        children: [
+          Expanded(
+              flex: 4,
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10)),
+                  child: CachedNetworkImage(
+                    fadeInCurve: Curves.easeInOut,
+                    fadeInDuration: const Duration(milliseconds: 200),
+                    imageUrl: image!,
+                    height: 360.0,
+                    fit: BoxFit.cover,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                        CircularProgressIndicator(
+                            color: theme.cyanTransparent,
+                            value: downloadProgress.progress),
+                    errorWidget: (context, url, error) =>
+                    const Icon(Icons.error),
+                  ))),
+          Expanded(
+            flex: 8,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
+                color: theme.cyanTransparent[300],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (icon != null)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: icon!,
+                          ),
+                        Expanded(
+                            child: Text(
+                              title,
+                              style: GoogleFonts.orbitron(
+                                  shadows: theme.shadow(),
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                        Container(
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10)),
+                              color: Colors.red,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Icon(
+                                FontAwesomeIcons.exclamation,
+                                color: Colors.white,
+                                shadows: theme.shadow(),
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                        child: Text(
+                          description ?? "",
+                          style: GoogleFonts.orbitron(
+                              shadows: theme.shadow(),
+                              color: Colors.white,
+                              fontSize: 14),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 

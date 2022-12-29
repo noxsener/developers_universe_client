@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile>
   Widget build(BuildContext context) {
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
-      return Scaffold(backgroundColor: Colors.orange, body: jobListView()
+      return Scaffold(backgroundColor: Colors.transparent, body: jobListView()
         // landscape
         //     ? Row(
         //   mainAxisAlignment: MainAxisAlignment.center,

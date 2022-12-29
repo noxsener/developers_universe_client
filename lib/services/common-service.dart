@@ -92,6 +92,15 @@ class CodenfastPageRoute extends MaterialPageRoute {
   Duration get transitionDuration => Duration(milliseconds: theme.animationDuration);
 }
 
+double getGridSquareAspectRatio(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  return size.width < 737
+      ? (size.aspectRatio / 0.33)
+      : size.width < 981
+      ? (size.aspectRatio / 0.643)
+      : (size.aspectRatio / 1.3);
+}
+
 Visibility generateVisibleWidget(Widget widget, bool isShow, bool stillCollapsingArea) {
   return Visibility(
     child: widget,

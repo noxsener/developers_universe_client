@@ -20,8 +20,40 @@ class CodenfastTheme {
   double iconSizeM = 14;
   double iconSizeL = 90;
   double iconSizeLX = 42;
-  
-  
+
+
+  MaterialColor blackTransparent = const MaterialColor(
+    0x05000000,
+    <int, Color>{
+      50: Color(0x05000000),
+      100: Color(0x10000000),
+      200: Color(0x20000000),
+      300: Color(0x30000000),
+      400: Color(0x40000000),
+      500: Color(0x50000000),
+      600: Color(0x60000000),
+      700: Color(0x70000000),
+      800: Color(0x80000000),
+      900: Color(0x90000000),
+    },
+  );
+
+  MaterialColor cyanTransparent = const MaterialColor(
+    0xAA00BCD4,
+    <int, Color>{
+      50: Color(0x0500BCD4),
+      100: Color(0x2200BCD4),
+      200: Color(0x4400BCD4),
+      300: Color(0x6600BCD4),
+      400: Color(0x8800BCD4),
+      500: Color(0xAA00BCD4),
+      600: Color(0xBB00BCD4),
+      700: Color(0xDD00BCD4),
+      800: Color(0xEE00BCD4),
+      900: Color(0xFF00BCD4),
+    },
+  );
+  static const int _cyanPrimaryValue = 0xFF00BCD4;
 
   Widget getBody(Widget child) {
     return Container(

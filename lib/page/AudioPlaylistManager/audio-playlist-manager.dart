@@ -98,7 +98,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                   child: RawScrollbar(
                     thumbColor: Colors.cyanAccent,
                     trackVisibility: true,
-                    thickness: 3,
+                    thickness: 5,
                     thumbVisibility: true,
                     controller: c.genreScrollController,
                     child: Obx(
@@ -142,7 +142,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                 child: RawScrollbar(
                   thumbColor: Colors.cyanAccent,
                   trackVisibility: true,
-                  thickness: 3,
+                  thickness: 5,
                   thumbVisibility: true,
                   controller: c.scrollController,
                   child: Obx(

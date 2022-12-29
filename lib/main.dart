@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:developersuniverse_client/component/codenfast-drawer/curved_drawer.dart';
 import 'package:developersuniverse_client/models/common-model.dart';
-import 'package:developersuniverse_client/page/Settings/settings.dart';
+import 'package:developersuniverse_client/page/Settings/modules.dart';
 import 'package:developersuniverse_client/page/TaskManager/job-management.dart';
 import 'package:developersuniverse_client/services/common-service.dart';
 import 'package:developersuniverse_client/services/jobService.dart';
@@ -33,7 +33,7 @@ void main() async {
   await Hive.openBox<Genre>("Genre").then((genreBox) => MyApp.genreBox = genreBox);
   await Hive.openBox<Media>("Media").then((mediaBox) => MyApp.mediaBox = mediaBox);
   await Hive.openBox<MediaDownloadSource>("MediaDownloadSource").then((mediaDownloadSourceBox) => MyApp.mediaDownloadSourceBox = mediaDownloadSourceBox);
-  // await Hive.openBox<Media>("ApplicationSettings").then((applicationSettings) => MyApp.applicationSettings = applicationSettings);
+  // await Hive.openBox<Media>("ApplicationModules").then((applicationModules) => MyApp.applicationModules = applicationModules);
   runApp(appInstance);
 }
 
@@ -44,14 +44,14 @@ class MyApp extends StatelessWidget {
   static late Box<Media> mediaBox;
   static late Box<MediaGenre> mediaGenreBox;
   static late Box<MediaDownloadSource> mediaDownloadSourceBox;
-  // static late Box<ApplicationSettings> applicationSettings;
+  // static late Box<ApplicationModules> applicationModules;
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'Developers Universe',
         theme: ThemeData(
-          primarySwatch: Colors.purple,
+          primarySwatch: theme.blackTransparent,
         ),
         debugShowCheckedModeBanner: false,
         home: const MyHomePage(),
@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -100,8 +100,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
-
-
 
       return SafeArea(
         child: Container(
@@ -117,83 +115,63 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ])),
           child: Scaffold(
             backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              bottom: TabBar(
+
+                tabs: [
+                  Tab(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.play_arrow, shadows: theme.shadow()),
+                        if(landscape) Text("Music Player", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
+                    ),
+                  ),
+                  Tab(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.table_chart, shadows: theme.shadow()),
+                        if(landscape) Text("Modules", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
+                    ),
+                  ),
+                  Tab(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.task, shadows: theme.shadow()),
+                        if(landscape) Text("App's Jobs", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
+                    ),
+                  )
+                ],
+                indicator: const BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                  gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [
+                        1
+                      ],
+                      colors: [
+                        Colors.cyan,
+                      ]),
+                ),
+                controller: _tabController,
+              ),
+              title: Text('Developers Universe', style: GoogleFonts.orbitron(),),
+            ),
             body: Column(
               children: [
-                TabBar(
-                  
-                  tabs: [
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.play_arrow, shadows: theme.shadow()),
-                          if(landscape) Text("Music Player", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
-                      ),
-                    ),
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.table_chart, shadows: theme.shadow()),
-                          if(landscape) Text("Modules", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
-                      ),
-                    ),
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Icon(FontAwesomeIcons.cogs, shadows: theme.shadow()),
-                          ),
-                          if(landscape) Text("Settings", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
-                      ),
-                    ),
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.task, shadows: theme.shadow()),
-                          if(landscape) Text("Jobs", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
-                      ),
-                    )
-                  ],
-                  indicator: const BoxDecoration(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: [
-                          1
-                        ],
-                        colors: [
-                          Colors.cyan,
-                        ]),
-                  ),
-                  controller: _tabController,
-                ),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
                     children: [
                       // Tab One
                       const AudioPlaylistManager(),
-                      // Tab Two
-                      CurvedDrawer(
-                          items: moduleDrawerItemList,
-                          onTap: (index) {
-                            print("Drawer Clicked $index");
-                            setState(() {});
-                          },
-                          labelColor: Colors.white,
-                          shadows: theme.shadow(),
-                          buttonBackgroundColor: Colors.cyan,
-                          color: Colors.cyan),
-                      const Settings(),
+                      const Modules(),
                       // Tab Three
                       jobManagement
                     ],

@@ -15,7 +15,7 @@ String getCodenfastMediaUrl(String? id) {
   if (id == null || id.isEmpty) {
     return "https://app.codenfast.com:8443/api/rest/server-files/system/image/codenfast.com/012021/logo.webp";
   }
-  return "http://85.105.13.152:10007/media/$id";
+  return "http://192.168.1.254:10007/media/$id";
 }
 
 RequestGrid mediaGenreServiceGridRequest(int? page, List<Genre>? genreList, {int pageSize = 20, String? sortField, int? sortOrder}) {
