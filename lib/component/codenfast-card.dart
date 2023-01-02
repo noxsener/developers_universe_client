@@ -53,11 +53,9 @@ class Card extends StatelessWidget {
                 leading: icon,
                 title: Text(
                   title,
-                  style: theme.cardHeader(),
                 ),
                 subtitle: Text(
                   subText ?? '',
-                  style: theme.cardSubText(),
                 ),
                 isThreeLine: subText != null && subText!.isNotEmpty,
               ),

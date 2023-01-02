@@ -323,11 +323,6 @@ class CodenfastMenu {
                         Expanded(
                             child: Text(
                               title,
-                              style: GoogleFonts.orbitron(
-                                  shadows: theme.shadow(),
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
                             )),
                         Container(
                             decoration: const BoxDecoration(
@@ -335,12 +330,11 @@ class CodenfastMenu {
                               BorderRadius.all(Radius.circular(10)),
                               color: Colors.red,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(4.0),
                               child: Icon(
                                 FontAwesomeIcons.exclamation,
                                 color: Colors.white,
-                                shadows: theme.shadow(),
                               ),
                             )),
                       ],
@@ -351,10 +345,6 @@ class CodenfastMenu {
                     Expanded(
                         child: Text(
                           description ?? "",
-                          style: GoogleFonts.orbitron(
-                              shadows: theme.shadow(),
-                              color: Colors.white,
-                              fontSize: 14),
                         ))
                   ],
                 ),

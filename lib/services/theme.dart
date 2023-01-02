@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/cupertino/theme.dart';
-import 'package:flutter/src/foundation/diagnostics.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CodenfastTheme {
-
   // Color backGroundColor1 = const Color(0xFF6A1B9A);
   // Color backGroundColor2 = const Color(0xFFC10685);
   // Color backGroundColor3 = const Color(0xFFF44169);
@@ -20,7 +17,6 @@ class CodenfastTheme {
   double iconSizeM = 14;
   double iconSizeL = 90;
   double iconSizeLX = 42;
-
 
   MaterialColor blackTransparent = const MaterialColor(
     0x05000000,
@@ -80,102 +76,197 @@ class CodenfastTheme {
     ];
   }
 
-  TextStyle getFont() {
-    return GoogleFonts.nunito();
-  }
-
-  TextStyle h1() {
-    return GoogleFonts.nunito(
-        textStyle: TextStyle(
-            color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold , shadows: shadow()));
-  }
-
-  TextStyle h1CrossColor() {
-    return GoogleFonts.nunito(
+  TextTheme textTheme = TextTheme(
+    displayLarge: GoogleFonts.orbitron(
         textStyle: const TextStyle(
             color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.bold));
-  }
-
-  TextStyle h2() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 28, shadows: shadow()));
-  }
-
-  TextStyle h2CrossColor() {
-    return GoogleFonts.nunito(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+        ])),
+    displayMedium: GoogleFonts.orbitron(
         textStyle: const TextStyle(
-            color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold));
-  }
-
-  TextStyle h3() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 26, shadows: shadow()));
-  }
-
-  TextStyle h3CrossColor() {
-    return GoogleFonts.nunito(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+        ])),
+    displaySmall: GoogleFonts.orbitron(
         textStyle: const TextStyle(
-            color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold));
-  }
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+        ])),
+    headlineLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+        ])),
+    headlineMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+        ])),
+    headlineSmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+        ])),
+    titleLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+        ])),
+    titleMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+        ])),
+    titleSmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+        ])),
+    labelLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16, shadows: [
+      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+    ])),
+    labelMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+        ])),
+    labelSmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+        ])),
+    bodyLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.white, fontSize: 18, shadows: [
+      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+    ])),
+    bodyMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.white, fontSize: 16, shadows: [
+      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+    ])),
+    bodySmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.white, fontSize: 14, shadows: [
+      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+    ])),
+  );
 
-  TextStyle h4() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 24, shadows: shadow()));
-  }
+  TextStyle inputFieldStyle = GoogleFonts.roboto(
+      textStyle: TextStyle(color: Colors.white, fontSize: 15, shadows: [
+        BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+      ]));
 
-  TextStyle h4CrossColor() {
-    return GoogleFonts.nunito(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 24));
-  }
+  /*
+  TextTheme textTheme2 = TextTheme(
+    displayLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 26,
+            fontWeight: FontWeight.bold)),
+    displayMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold)),
+    displaySmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.bold)),
+    headlineLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold)),
+    headlineMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.bold)),
+    headlineSmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold)),
+    titleLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold)),
+    titleMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold)),
+    titleSmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold)),
+    labelLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.black, fontSize: 16)),
+    labelMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+            fontWeight: FontWeight.bold)),
+    labelSmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            fontWeight: FontWeight.bold)),
+    bodyLarge: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.black, fontSize: 16)),
+    bodyMedium: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.black, fontSize: 14)),
+    bodySmall: GoogleFonts.orbitron(
+        textStyle: const TextStyle(color: Colors.black, fontSize: 12)),
+  );
+*/
+  IconThemeData iconTheme = const IconThemeData(color: Colors.white, shadows: [
+    BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+  ]);
 
-  TextStyle h5() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 20, shadows: shadow()));
-  }
+  /*
+  IconThemeData iconTheme2 = const IconThemeData(color: Colors.black, shadows: [
+    BoxShadow(color: Colors.white, offset: Offset(0, 0), blurRadius: 4)
+  ]);
+*/
 
-  TextStyle h5CrossColor() {
-    return GoogleFonts.nunito(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 20));
-  }
-
-  TextStyle h6() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 18, shadows: shadow()));
-  }
-
-  TextStyle h6CrossColor() {
-    return GoogleFonts.nunito(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 18));
-  }
-
-  TextStyle label() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 16, shadows: shadow()));
-  }
-
-  TextStyle labelCrossColor() {
-    return GoogleFonts.nunito(
-        textStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16));
-  }
-
-  TextStyle normal() {
-    return GoogleFonts.nunito(
-        textStyle:
-            TextStyle(color: Colors.black, fontSize: 14, shadows: shadow()));
-  }
-
-  TextStyle normalCrossColor() {
-    return GoogleFonts.nunito(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 14));
-  }
 
   Widget circleAvatar(ImageProvider imageProvider, double size) {
     return CircleAvatar(
@@ -188,29 +279,6 @@ class CodenfastTheme {
         ),
       ),
     );
-  }
-
-  Color selectedWidgetColor() {
-    return Colors.blueAccent;
-  }
-
-  Color dialogBarrier() {
-    // return Color(0xFFF44169);
-    return Colors.white54;
-  }
-
-  TextStyle cardHeader() {
-    return GoogleFonts.nunito(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold));
-  }
-
-  TextStyle cardSubText() {
-    return GoogleFonts.nunito(
-        textStyle:
-        const TextStyle(color: Colors.white, fontSize: 14));
   }
 
   ButtonStyle positiveButtonStyle() {

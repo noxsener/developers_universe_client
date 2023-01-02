@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:developersuniverse_client/component/codenfast-drawer/curved_drawer.dart';
 import 'package:developersuniverse_client/models/common-model.dart';
-import 'package:developersuniverse_client/page/Settings/modules.dart';
+import 'package:developersuniverse_client/page/Modules/modules.dart';
 import 'package:developersuniverse_client/page/TaskManager/job-management.dart';
 import 'package:developersuniverse_client/services/common-service.dart';
 import 'package:developersuniverse_client/services/jobService.dart';
@@ -14,16 +14,22 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:window_size/window_size.dart';
 
 import 'page/AudioPlaylistManager/audio-playlist-manager.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid || Platform.isIOS) {
-    WidgetsFlutterBinding.ensureInitialized();
     ByteData data = await PlatformAssetBundle()
         .load('assets/trusted-certs/lets-encrypt-r3.pem');
     SecurityContext.defaultContext
         .setTrustedCertificatesBytes(data.buffer.asUint8List());
+  }
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowTitle('Developers Universe');
+    setWindowMinSize(const Size(500, 600));
+    setWindowMaxSize(Size.infinite);
   }
   await Hive.initFlutter();
   registerHiveAdapters();
@@ -52,6 +58,72 @@ class MyApp extends StatelessWidget {
         title: 'Developers Universe',
         theme: ThemeData(
           primarySwatch: theme.blackTransparent,
+          textTheme: theme.textTheme,
+          primaryTextTheme: theme.textTheme,
+          iconTheme: theme.iconTheme,
+          inputDecorationTheme: InputDecorationTheme(
+            focusColor: Colors.white,
+            fillColor: Colors.white,
+            suffixIconColor: Colors.white,
+            prefixIconColor: Colors.white,
+            iconColor: Colors.white,
+            hoverColor: Colors.white,
+            labelStyle: theme.textTheme.labelLarge,
+            counterStyle: theme.textTheme.bodyMedium,
+            prefixStyle: theme.textTheme.bodyMedium,
+            suffixStyle: theme.textTheme.bodyMedium,
+            errorStyle: theme.textTheme.labelMedium?.copyWith(inherit: true, color: Colors.white),
+            hintStyle: theme.textTheme.bodySmall,
+            helperStyle: theme.textTheme.bodySmall,
+            floatingLabelAlignment: FloatingLabelAlignment.center,
+            helperMaxLines: 3,
+            errorMaxLines: 3,
+            contentPadding: const EdgeInsets.all(5),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            isDense: true,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                      color: Colors.white,
+                      width: 1
+                  )
+              ),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(
+                    color: Colors.white,
+                    width: 1
+                )
+            ),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                      color: Colors.cyanAccent,
+                      width: 2
+                  )
+              ),
+              disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1
+                  )
+              ),
+              errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                      color: Color(0xFFD50000),
+                      width: 1
+                  )
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                      color: Colors.red,
+                      width: 2
+                  )
+              ),
+          )
         ),
         debugShowCheckedModeBanner: false,
         home: const MyHomePage(),
@@ -80,15 +152,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   TabController? _tabController;
 
   JobManagement jobManagement = const JobManagement();
-
-  List<DrawerItem> moduleDrawerItemList = const [
-    DrawerItem(
-        label: "Digital Archive",
-        icon: Icon(FontAwesomeIcons.folderOpen, shadows: [BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)])),
-    DrawerItem(
-        label: "Fibonacci Poker",
-        icon: Icon(FontAwesomeIcons.solidHeart, shadows: [BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)]))
-  ];
 
   @override
   void initState() {
@@ -124,8 +187,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.play_arrow, shadows: theme.shadow()),
-                        if(landscape) Text("Music Player", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
+                        const Icon(Icons.table_chart),
+                        if(landscape) const Text("Modules")],
                     ),
                   ),
                   Tab(
@@ -133,8 +196,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.table_chart, shadows: theme.shadow()),
-                        if(landscape) Text("Modules", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
+                        const Icon(Icons.play_arrow),
+                        if(landscape) const Text("Music Player")],
                     ),
                   ),
                   Tab(
@@ -142,8 +205,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.task, shadows: theme.shadow()),
-                        if(landscape) Text("App's Jobs", style: GoogleFonts.orbitron(shadows: theme.shadow()))],
+                        const Icon(Icons.task),
+                        if(landscape) const Text("App's Jobs")],
                     ),
                   )
                 ],
@@ -161,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ),
                 controller: _tabController,
               ),
-              title: Text('Developers Universe', style: GoogleFonts.orbitron(),),
+              title: const Text('Developers Universe'),
             ),
             body: Column(
               children: [
@@ -170,8 +233,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     controller: _tabController,
                     children: [
                       // Tab One
-                      const AudioPlaylistManager(),
                       const Modules(),
+
+                      const AudioPlaylistManager(),
                       // Tab Three
                       jobManagement
                     ],

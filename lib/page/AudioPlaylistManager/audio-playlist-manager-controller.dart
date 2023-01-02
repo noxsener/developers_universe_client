@@ -56,10 +56,10 @@ class AudioPlaylistManagerController extends GetxController {
     genreList.refresh();
 
     if (MyApp.mediaBox.values.isEmpty) {
-      mediaGenreServiceGridCall(
+      await mediaGenreServiceGridCall(
               context,
               mediaGenreServiceGridRequest(page.value, selectedGenreList,
-                  pageSize: 1000))
+                  pageSize: 200))
           .then((List<MediaGenre> responseValue) {
         mediaList.value = responseValue.map((e) => e.media!).toList();
       });
@@ -92,6 +92,9 @@ class AudioPlaylistManagerController extends GetxController {
         nextMedia();
       } else {
         position.value = const Duration();
+        Source source = UrlSource(media!.value.downloadedUrl!);
+        audioPlayer.value
+            .play(source, position: position.value, mode: PlayerMode.mediaPlayer);
       }
     });
 
@@ -280,9 +283,11 @@ class AudioPlaylistManagerController extends GetxController {
   loopButtonOnClick() {
     isLoop.value = (!isLoop.isTrue);
     if (isLoop.isTrue) {
-      audioPlayer.value.setReleaseMode(ReleaseMode.loop);
+      // Linux limitation; release mode
+      //audioPlayer.value.setReleaseMode(ReleaseMode.loop);
     } else {
-      audioPlayer.value.setReleaseMode(ReleaseMode.release);
+      // Linux limitation; release mode
+      //audioPlayer.value.setReleaseMode(ReleaseMode.release);
     }
     audioPlayer.refresh();
     isLoop.refresh();

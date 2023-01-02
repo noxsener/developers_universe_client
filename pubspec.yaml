@@ -37,27 +37,25 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   http: ^0.13.4
   intl: ^0.17.0
-  connectivity_plus: ^2.3.8
-  flutter_local_notifications: ^11.0.1
+  connectivity_plus: ^3.0.2
+  flutter_local_notifications: ^13.0.0
   uuid: ^3.0.4
   cached_network_image: ^3.2.1 # Network saver
   image_picker: ^0.8.1+3 #galery + camera
-  image: ^3.0.2 #image resize, convert
-  open_file: ^3.2.1 #open file from device
+  image: ^4.0.4 #image resize, convert
+  open_app_file: ^4.0.1 #open file from device // open_app_file will replaced
   url_launcher: ^6.0.17 #browser open
   path_provider: ^2.0.2
   expandable: ^5.0.1
   flutter_colorpicker: ^1.0.3
-  simple_markdown_editor: ^0.2.0
-  markdown_editable_textinput: ^2.0.2
   simple_animations: ^5.0.0+2
   introduction_screen: ^3.0.2
   curved_navigation_bar: ^1.0.1
   flutter_staggered_animations: ^1.0.0
-  font_awesome_flutter: ^9.1.0
+  font_awesome_flutter: ^10.3.0
   rxdart: ^0.27.2
   google_fonts: ^3.0.1
-  file_picker: ^4.5.0
+  file_picker: ^5.2.4
   audioplayers: ^1.1.0
   device_info: ^2.0.3 # Replaced device_info_plus, but open_file has problem
   animated_text_kit: ^4.2.2
@@ -68,6 +66,10 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   carousel_slider: ^4.2.1
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding
+      path: plugins/window_size
 
 
 dev_dependencies:

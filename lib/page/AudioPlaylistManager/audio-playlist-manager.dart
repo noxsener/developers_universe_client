@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:developersuniverse_client/page/AudioPlaylistManager/audio-playlist-manager-controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../component/MusicCard.dart';
@@ -123,12 +122,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                   padding: const EdgeInsets.all(3.0),
                                   child: Text(
                                       genreIndex.name ?? "No-Name Genre",
-                                      style: GoogleFonts.orbitron(
-                                          fontSize: 12,
-                                          color: c.selectedGenreList
-                                                  .contains(genreIndex)
-                                              ? Colors.black87
-                                              : Colors.cyan)),
+                                      style: theme.textTheme.labelSmall?.copyWith(inherit: true, color: Colors.cyanAccent)),
                                 ),
                               ),
                               onTap: (() =>
@@ -165,12 +159,10 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                               child: ListTile(
                                 title: Text(
                                   mediaIndex.name ?? "No-Name Music",
-                                  style: GoogleFonts.orbitron(
-                                      fontSize: 12,
-                                      color: c.media?.value.id == mediaIndex.id
-                                          ? Colors.black
-                                          : Colors.cyan,
-                                      fontWeight: FontWeight.bold),
+                                  style: theme.textTheme.labelMedium?.copyWith(inherit: true, color: c.media?.value.id == mediaIndex.id
+                                      ? Colors.black
+                                      : Colors.cyan,
+                                  shadows: c.media?.value.id == mediaIndex.id ? [] : theme.shadow()),
                                 ),
                                 leading: CachedNetworkImage(
                                   imageUrl: mediaIndex
@@ -193,10 +185,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                 ),
                                 subtitle: Text(
                                   mediaIndex.attributionText ?? "",
-                                  style: GoogleFonts.orbitron(
-                                      fontSize: 11, color: Colors.white,
-                                    shadows: theme.shadow()
-                                  ),
+                                  style: theme.textTheme.bodySmall,
                                 ),
                                 isThreeLine: true,
                                 trailing: null,
@@ -276,7 +265,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             duration: const Duration(seconds: 1),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(50), topRight: Radius.circular(50)),
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -315,42 +304,31 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
               if (c.media != null)
                 Container(
                   alignment: Alignment.topLeft,
-                  margin: const EdgeInsets.only(left: 5, top: 20),
+                  margin: const EdgeInsets.only(left: 5, top: 10),
                   child: Obx(
-                    () => Text(
-                      "Music: ${turkishToEnglishLetters(c.media!.value.name ?? "No-Name Music")}",
-                      style: GoogleFonts.orbitron(
-                          textStyle: const TextStyle(
-                              color: Colors.cyanAccent,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                          shadows: [
-                            const BoxShadow(
-                                color: Colors.black,
-                                offset: Offset(0, 2),
-                                blurRadius: 6,
-                                spreadRadius: 10)
-                          ]),
+                    () => Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          turkishToEnglishLetters(c.media!.value.name ?? "No-Name Music"),
+                          style: theme.textTheme.labelLarge?.copyWith(inherit: true, color: Colors.cyanAccent)
+                        ),
+                        if (c.media != null && c.media!.value.attributionText != null)
+                          Expanded(
+                          child: Obx(() => Text(c.media!.value.attributionText!,
+                              style: theme.textTheme.bodySmall)),
+                        )
+                      ],
                     ),
                   ),
                 ),
-              if (c.media != null && c.media!.value.attributionText != null)
-                Container(
-                    alignment: Alignment.topLeft,
-                    margin: const EdgeInsets.only(left: 5, top: 60),
-                    child: Obx(() => Text(c.media!.value.attributionText!,
-                        style: GoogleFonts.orbitron(
-                            textStyle: const TextStyle(
-                                color: Colors.cyanAccent,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold),
-                            shadows: [
-                              const BoxShadow(
-                                  color: Colors.black,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 6,
-                                  spreadRadius: 10)
-                            ])))),
+              // if (c.media != null && c.media!.value.attributionText != null)
+              //   Container(
+              //       alignment: Alignment.topLeft,
+              //       margin: const EdgeInsets.only(left: 5, top: 60),
+              //       child: Obx(() => Text(c.media!.value.attributionText!,
+              //           style: theme.textTheme.bodySmall))),
               if (c.media != null && c.media!.value.attributionLink != null)
                 Container(
                     alignment: Alignment.bottomLeft,
@@ -360,18 +338,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                         launchUrl(Uri.parse(c.media!.value.attributionLink!));
                       },
                       child: Obx(() => Text(c.media!.value.attributionLink!,
-                          style: GoogleFonts.orbitron(
-                              textStyle: const TextStyle(
-                                  color: Colors.cyanAccent,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold),
-                              shadows: [
-                                const BoxShadow(
-                                    color: Colors.black,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 6,
-                                    spreadRadius: 10)
-                              ]))),
+                          style: theme.textTheme.bodySmall?.copyWith(inherit: true, color: Colors.cyanAccent))),
                     )),
               if (c.media != null)
                 Container(
@@ -380,21 +347,9 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                   child: Obx(
                     () => Text(
                       "${c.position.toString().split('.').first.padLeft(8, "0")}/${c.duration.toString().split('.').first.padLeft(8, "0")}",
-                      style: GoogleFonts.orbitron(
-                          textStyle: const TextStyle(
-                              color: Colors.cyanAccent,
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold),
-                          shadows: [
-                            const BoxShadow(
-                                color: Colors.black,
-                                offset: Offset(0, 2),
-                                blurRadius: 6,
-                                spreadRadius: 10)
-                          ]),
+    style: theme.textTheme.bodyMedium?.copyWith(inherit: true, color: Colors.cyanAccent)),
                     ),
                   ),
-                ),
             ]),
           ),
         ),
@@ -715,7 +670,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
     return IconButton(
       iconSize: 30,
       onPressed: () => c.stopButtonOnClick(),
-      icon: Icon(Icons.stop,
+      icon: Obx(() => Icon(Icons.stop,
           color: c.audioPlayer.value.state == PlayerState.stopped
               ? Colors.cyan
               : Colors.grey,
@@ -726,7 +681,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                   offset: Offset(0, 0),
                   blurRadius: 5,
                   spreadRadius: 12),
-          ]),
+          ])),
     );
   }
 

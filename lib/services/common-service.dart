@@ -113,7 +113,7 @@ Visibility generateVisibleWidget(Widget widget, bool isShow, bool stillCollapsin
 
 showSnackBar(BuildContext context, String text) {
   final snackBar = SnackBar(
-    content: Text(text, style: theme.normal()),
+    content: Text(text, style: theme.textTheme.bodySmall),
     behavior: SnackBarBehavior.floating,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -149,14 +149,14 @@ errorHandler(BuildContext context, Response response) {
         overflow: TextOverflow.fade,
         maxLines: 5,
         softWrap: true,
-        style: theme.h1CrossColor(),
+        style: theme.textTheme.headline1,
       ),
       Text(
         transform(errorMessage),
         overflow: TextOverflow.fade,
         maxLines: 5,
         softWrap: true,
-        style: theme.normalCrossColor(),
+        style: theme.textTheme.bodySmall,
       ),
       [
         TextButton(
@@ -165,7 +165,7 @@ errorHandler(BuildContext context, Response response) {
             },
             child: Text(
               transform("accept"),
-              style: theme.normalCrossColor(),
+              style: theme.textTheme.button,
             ))
       ]);
 }
@@ -173,7 +173,6 @@ errorHandler(BuildContext context, Response response) {
 showAlertDialog(BuildContext context, Widget title, Widget content, List<TextButton>? actions) {
   showDialog<String>(
       context: context,
-      barrierColor: theme.dialogBarrier(),
       builder: (BuildContext context) => AlertDialog(
             title: title,
             content: content,

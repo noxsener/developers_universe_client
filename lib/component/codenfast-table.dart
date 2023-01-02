@@ -43,7 +43,7 @@ class Table extends StatefulWidget {
         padding: const EdgeInsets.only(top: 16),
         child: Text(
           error != null ? error.toString() : transform('error'),
-          style: theme.normalCrossColor(),
+          style: theme.textTheme.bodyMedium,
         ),
       )
     ];
@@ -65,13 +65,13 @@ class Table extends StatefulWidget {
 
   static List<Widget> getNoData() {
     return <Widget>[
-      Icon(FontAwesomeIcons.exclamationTriangle,
+      Icon(FontAwesomeIcons.triangleExclamation,
           color: Colors.red[600], size: 48),
       Padding(
         padding: const EdgeInsets.only(top: 16),
         child: Text(
           transform('noRecord'),
-          style: theme.labelCrossColor(),
+          style: theme.textTheme.labelMedium,
         ),
       )
     ];
@@ -162,8 +162,7 @@ class _TableState extends State<Table> {
                     child: Ink(
                       decoration: ShapeDecoration(
                         color: firsPage ? Colors.grey : Colors.lightBlue,
-                        shape: CircleBorder(),
-                          shadows: theme.shadow()
+                        shape: CircleBorder()
                       ),
                       child: IconButton(
                         splashColor: const Color(0x9903A9F4),
@@ -182,7 +181,7 @@ class _TableState extends State<Table> {
             ),
             Text(
               (((widget.getRequestGrid() as RequestGrid).page! / (widget.getRequestGrid() as RequestGrid).pageSize!).toInt() + 1).toString() + "/"+((((widget.getTotalRowCount() ?? (widget.getRequestGrid() as RequestGrid).pageSize! * 2) / (widget.getRequestGrid() as RequestGrid).pageSize) as double).toInt() + 1).toString(),
-              style: theme.labelCrossColor(),
+              style: theme.textTheme.labelMedium,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -194,8 +193,7 @@ class _TableState extends State<Table> {
                     child: Ink(
                       decoration: ShapeDecoration(
                           color: lastPage ? Colors.grey : Colors.lightBlue,
-                        shape: CircleBorder(),
-                          shadows: theme.shadow()
+                        shape: CircleBorder()
                       ),
                       child: IconButton(
                         splashColor: const Color(0x9903A9F4),

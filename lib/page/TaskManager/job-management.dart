@@ -118,13 +118,7 @@ class _JobManagementState extends State<JobManagement>
                     duration: const Duration(milliseconds: 200),
                     child: ListTile(
                       title: Text(
-                        jobIndex.name,
-                        style: GoogleFonts.orbitron(
-                            fontSize: 14,
-                            color: c.job?.value.id == jobIndex.id
-                                ? Colors.black
-                                : Colors.cyan,
-                            fontWeight: FontWeight.bold),
+                        jobIndex.name
                       ),
                       leading: jobIndex.icon,
                       subtitle: Column(
@@ -132,11 +126,7 @@ class _JobManagementState extends State<JobManagement>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            jobIndex.description ?? "",
-                            style: GoogleFonts.orbitron(
-                                fontSize: 14,
-                                color: Colors.white,
-                                shadows: theme.shadow()),
+                            jobIndex.description ?? ""
                           ),
                           SizedBox(
                               height: 5,
@@ -166,7 +156,6 @@ class _JobManagementState extends State<JobManagement>
                                         (jobIndex.isStarted.value && jobIndex.isDone.value && !jobIndex.doneWithError.value) ? const Color(0xFF00c853) :
                                         const Color(0xFFf9a825),
                                         borderRadius: BorderRadius.circular(10),
-                                      boxShadow: theme.shadow()
                                     ),
                                     child:
                                     (!jobIndex.isStarted.value && !jobIndex.isDone.value) ? const Icon(FontAwesomeIcons.pause, color: Colors.white, size: 14,) :
@@ -176,11 +165,7 @@ class _JobManagementState extends State<JobManagement>
                                 const SizedBox(width: 5,),
                                 Expanded(
                                   child: Obx(() => Text(
-                                    jobIndex.statusMessage.value ?? "",
-                                    style: GoogleFonts.orbitron(
-                                        fontSize: 11,
-                                        color: Colors.white,
-                                        shadows: theme.shadow()),
+                                    jobIndex.statusMessage.value ?? ""
                                   )),
                                 ),
                               ],
@@ -200,7 +185,6 @@ class _JobManagementState extends State<JobManagement>
                               decoration: BoxDecoration(
                                   color: const Color(0xFFFF2100),
                                   borderRadius: BorderRadius.circular(10),
-                                  boxShadow: theme.shadow()
                               ),
                               child: IconButton(onPressed: () {
                               }, icon: const Icon(FontAwesomeIcons.times, color: Colors.white, size: 20,))),
@@ -211,7 +195,6 @@ class _JobManagementState extends State<JobManagement>
                               decoration: BoxDecoration(
                                   color: const Color(0xFF00c853),
                                   borderRadius: BorderRadius.circular(10),
-                                  boxShadow: theme.shadow()
                               ),
                               child: IconButton(onPressed: () {
 
