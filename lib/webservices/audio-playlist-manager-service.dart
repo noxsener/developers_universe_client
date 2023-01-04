@@ -62,7 +62,7 @@ Future<List<MediaGenre>> mediaGenreServiceGridCall(
   HClient hclient = HClient();
   return
   hclient.post(":10007/api/media-genre/grid",
-      requestGrid)
+      object:  requestGrid)
       .then((response) async {
     if (response.statusCode != 200) {
       errorHandler(context, response);
@@ -90,7 +90,7 @@ Future<List<Genre>> genreServiceGridCall(
     BuildContext context, RequestGrid requestGrid) async {
   HClient hclient = HClient();
   return hclient
-      .post(":10007/api/genre/grid", requestGrid)
+      .post(":10007/api/genre/grid", object: requestGrid)
       .then((response) {
     if (response.statusCode != 200) {
       errorHandler(context, response);

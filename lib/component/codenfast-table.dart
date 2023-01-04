@@ -43,7 +43,7 @@ class Table extends StatefulWidget {
         padding: const EdgeInsets.only(top: 16),
         child: Text(
           error != null ? error.toString() : transform('error'),
-          style: theme.textTheme.bodyMedium,
+          style: theme.textTheme().bodyMedium,
         ),
       )
     ];
@@ -71,7 +71,7 @@ class Table extends StatefulWidget {
         padding: const EdgeInsets.only(top: 16),
         child: Text(
           transform('noRecord'),
-          style: theme.textTheme.labelMedium,
+          style: theme.textTheme().labelMedium,
         ),
       )
     ];
@@ -181,7 +181,7 @@ class _TableState extends State<Table> {
             ),
             Text(
               (((widget.getRequestGrid() as RequestGrid).page! / (widget.getRequestGrid() as RequestGrid).pageSize!).toInt() + 1).toString() + "/"+((((widget.getTotalRowCount() ?? (widget.getRequestGrid() as RequestGrid).pageSize! * 2) / (widget.getRequestGrid() as RequestGrid).pageSize) as double).toInt() + 1).toString(),
-              style: theme.textTheme.labelMedium,
+              style: theme.textTheme().labelMedium,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

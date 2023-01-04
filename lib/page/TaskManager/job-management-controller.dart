@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:developersuniverse_client/main.dart';
+import 'package:developersuniverse_client/services/common-service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -79,6 +80,7 @@ class JobManagementController extends GetxController {
       basejob.statusMessage ??= "List Updated".obs;
       basejob.statusMessage.value = "List Updated: $totalCount row/s processed";
       basejob.statusMessage.refresh();
+      showSnackBar(context, "Music list updated: $totalCount row/s processed for offline usage");
     } catch (e) {
       basejob.progress.value = 100;
       basejob.progress.refresh();
@@ -88,6 +90,7 @@ class JobManagementController extends GetxController {
       basejob.statusMessage ??= e.toString().obs;
       basejob.statusMessage.value = e.toString();
       basejob.statusMessage.refresh();
+      showSnackBar(context, "Music list failed: $e");
     }
     }).onError((error, stackTrace) {
       job!.value.progress.value = 100;
@@ -98,6 +101,7 @@ class JobManagementController extends GetxController {
       job!.value.statusMessage ??= error.toString().obs;
       job!.value.statusMessage.value = error.toString();
       job!.value.statusMessage.refresh();
+      showSnackBar(context, "Music list failed: $error");
     });
   }
 

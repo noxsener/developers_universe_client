@@ -34,7 +34,7 @@ class _ModulesState extends State<Modules>
     List<CodenfastMenu> menuList = [
       CodenfastMenu(
           title: "Profile",
-          icon: Icon(
+          icon: const Icon(
             FontAwesomeIcons.userTie,
             color: Colors.white,
           ),
@@ -53,7 +53,7 @@ class _ModulesState extends State<Modules>
           }),
       CodenfastMenu(
           title: "Digital Archive",
-          icon: Icon(
+          icon: const Icon(
             FontAwesomeIcons.paperclip,
             color: Colors.white,
           ),
@@ -62,7 +62,7 @@ class _ModulesState extends State<Modules>
               "https://c.pxhere.com/photos/7b/35/library_books_shelving_shelves_reading_culture_corridor_classic-863788.jpg!d"),
       CodenfastMenu(
           title: "Coffee Break",
-          icon: Icon(
+          icon: const Icon(
             FontAwesomeIcons.mugHot,
             color: Colors.white,
           ),
@@ -71,7 +71,7 @@ class _ModulesState extends State<Modules>
               "https://c.pxhere.com/photos/d0/37/cafe_coffee_shop_coffee_iphone_table-39.jpg!d"),
       CodenfastMenu(
           title: "Settings",
-          icon: Icon(
+          icon: const Icon(
             FontAwesomeIcons.gear,
             color: Colors.white,
           ),
@@ -113,7 +113,7 @@ class _ModulesState extends State<Modules>
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    IconButton(onPressed: () {c.activeWidget!.value = c.moduleMenu;}, icon: const Icon(FontAwesomeIcons.chevronLeft)),
+                    IconButton(onPressed: () {c.activeWidget!.value = c.moduleMenu;}, icon: const Icon(FontAwesomeIcons.chevronLeft, color: Colors.white,)),
                     Text(c.title.value),
                   ],
                 ),

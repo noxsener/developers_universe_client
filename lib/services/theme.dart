@@ -12,11 +12,6 @@ class CodenfastTheme {
   Color backGroundColor4 = const Color(0xFF111111);
 
   int animationDuration = 500;
-  Color iconColor = const Color(0xFF000000);
-  Color iconColorCrossColor = const Color(0xFFFFFFFF);
-  double iconSizeM = 14;
-  double iconSizeL = 90;
-  double iconSizeLX = 42;
 
   MaterialColor blackTransparent = const MaterialColor(
     0x05000000,
@@ -76,119 +71,138 @@ class CodenfastTheme {
     ];
   }
 
-  TextTheme textTheme = TextTheme(
-    displayLarge: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
-        ])),
-    displayMedium: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
-        ])),
-    displaySmall: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
-        ])),
-    headlineLarge: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
-        ])),
-    headlineMedium: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
-        ])),
-    headlineSmall: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
-        ])),
-    titleLarge: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
-        ])),
-    titleMedium: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
-        ])),
-    titleSmall: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
-        ])),
-    labelLarge: GoogleFonts.orbitron(
-        textStyle: const TextStyle(color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16, shadows: [
-      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
-    ])),
-    labelMedium: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
-        ])),
-    labelSmall: GoogleFonts.orbitron(
-        textStyle: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            shadows: [
-          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
-        ])),
-    bodyLarge: GoogleFonts.orbitron(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 18, shadows: [
-      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
-    ])),
-    bodyMedium: GoogleFonts.orbitron(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 16, shadows: [
-      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
-    ])),
-    bodySmall: GoogleFonts.orbitron(
-        textStyle: const TextStyle(color: Colors.white, fontSize: 14, shadows: [
-      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
-    ])),
-  );
+  TextTheme textTheme() {
+    return TextTheme(
+      displayLarge: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+              ])),
+      displayMedium: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+              ])),
+      displaySmall: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+              ])),
+      headlineLarge: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+              ])),
+      headlineMedium: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+              ])),
+      headlineSmall: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+              ])),
+      titleLarge: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+              ])),
+      titleMedium: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+              ])),
+      titleSmall: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+              ])),
+      labelLarge: GoogleFonts.orbitron(
+          textStyle: const TextStyle(color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14, shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+              ])),
+      labelMedium: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+              ])),
+      labelSmall: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                BoxShadow(
+                    color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+              ])),
+      bodyLarge: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white, fontSize: 14, shadows: [
+            BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 5)
+          ])),
+      bodyMedium: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white, fontSize: 13, shadows: [
+            BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+          ])),
+      bodySmall: GoogleFonts.orbitron(
+          textStyle: const TextStyle(
+              color: Colors.white, fontSize: 11, shadows: [
+            BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+          ])),
+    );
+  }
 
-  TextStyle inputFieldStyle = GoogleFonts.roboto(
-      textStyle: TextStyle(color: Colors.white, fontSize: 15, shadows: [
-        BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
-      ]));
+  TextStyle inputFieldStyle() {
+    return GoogleFonts.roboto(
+        textStyle: const TextStyle(color: Colors.white, fontSize: 15, shadows: [
+          BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 3)
+        ]));
+  }
 
   /*
   TextTheme textTheme2 = TextTheme(
@@ -257,9 +271,79 @@ class CodenfastTheme {
         textStyle: const TextStyle(color: Colors.black, fontSize: 12)),
   );
 */
-  IconThemeData iconTheme = const IconThemeData(color: Colors.white, shadows: [
-    BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
-  ]);
+  IconThemeData iconTheme() {
+    return const IconThemeData(color: Colors.white, shadows: [
+      BoxShadow(color: Colors.black, offset: Offset(0, 0), blurRadius: 4)
+    ]);
+  }
+
+
+  InputDecorationTheme inputDecorationTheme() {
+    return InputDecorationTheme(
+      focusColor: Colors.white,
+      fillColor: Colors.white,
+      suffixIconColor: Colors.white,
+      prefixIconColor: Colors.white,
+      iconColor: Colors.white,
+      hoverColor: Colors.white,
+      labelStyle: textTheme().labelLarge,
+      counterStyle: textTheme().bodyMedium,
+      prefixStyle: textTheme().bodyMedium,
+      suffixStyle: textTheme().bodyMedium,
+      errorStyle: textTheme().labelMedium?.copyWith(
+          inherit: true, color: Colors.white),
+      hintStyle: textTheme().bodySmall,
+      helperStyle: textTheme().bodySmall,
+      floatingLabelAlignment: FloatingLabelAlignment.center,
+      helperMaxLines: 3,
+      errorMaxLines: 3,
+      contentPadding: const EdgeInsets.all(5),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      isDense: true,
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+              color: Colors.white,
+              width: 1
+          )
+      ),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+              color: Colors.white,
+              width: 1
+          )
+      ),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+              color: Colors.cyanAccent,
+              width: 2
+          )
+      ),
+      disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+              color: Colors.grey,
+              width: 1
+          )
+      ),
+      errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+              color: Color(0xFFD50000),
+              width: 1
+          )
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+              color: Colors.red,
+              width: 2
+          )
+      ),
+    );
+  }
 
   /*
   IconThemeData iconTheme2 = const IconThemeData(color: Colors.black, shadows: [
@@ -329,3 +413,4 @@ class CodenfastTheme {
     );
   }
 }
+

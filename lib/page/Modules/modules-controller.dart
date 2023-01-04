@@ -105,8 +105,8 @@ class ModulesController extends GetxController {
                   (size.width < 737
                       ? 0.6
                       : size.width < 981
-                      ? 0.5
-                      : 0.3),
+                      ? 0.55
+                      : 0.5),
                   initialPage: 0,
                   enableInfiniteScroll: true,
                   reverse: false,
@@ -128,9 +128,9 @@ class ModulesController extends GetxController {
               padding: const EdgeInsets.all(10),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: size.width /
-                      (size.width < 737
+                      (size.width < 900
                           ? 1
-                          : size.width < 981
+                          : size.width < 1200
                           ? 2
                           : 4),
                   childAspectRatio: 4 / 2,
@@ -169,7 +169,7 @@ class ModulesController extends GetxController {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    IconButton(onPressed: () {activeWidget!.value = moduleMenu;}, icon: const Icon(FontAwesomeIcons.chevronLeft)),
+                    IconButton(onPressed: () {activeWidget!.value = moduleMenu;}, icon: const Icon(FontAwesomeIcons.chevronLeft, color: Colors.white,)),
                     const Text("Settings"),
                   ],
                 ),

@@ -94,9 +94,9 @@ class CodenfastPageRoute extends MaterialPageRoute {
 
 double getGridSquareAspectRatio(BuildContext context) {
   Size size = MediaQuery.of(context).size;
-  return size.width < 737
+  return size.width < 800
       ? (size.aspectRatio / 0.33)
-      : size.width < 981
+      : size.width < 1000
       ? (size.aspectRatio / 0.643)
       : (size.aspectRatio / 1.3);
 }
@@ -113,7 +113,7 @@ Visibility generateVisibleWidget(Widget widget, bool isShow, bool stillCollapsin
 
 showSnackBar(BuildContext context, String text) {
   final snackBar = SnackBar(
-    content: Text(text, style: theme.textTheme.bodySmall),
+    content: Text(text, style: theme.textTheme().bodySmall),
     behavior: SnackBarBehavior.floating,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -149,14 +149,14 @@ errorHandler(BuildContext context, Response response) {
         overflow: TextOverflow.fade,
         maxLines: 5,
         softWrap: true,
-        style: theme.textTheme.headline1,
+        style: theme.textTheme().headline1,
       ),
       Text(
         transform(errorMessage),
         overflow: TextOverflow.fade,
         maxLines: 5,
         softWrap: true,
-        style: theme.textTheme.bodySmall,
+        style: theme.textTheme().bodySmall,
       ),
       [
         TextButton(
@@ -165,7 +165,7 @@ errorHandler(BuildContext context, Response response) {
             },
             child: Text(
               transform("accept"),
-              style: theme.textTheme.button,
+              style: theme.textTheme().button,
             ))
       ]);
 }

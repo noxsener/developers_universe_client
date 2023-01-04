@@ -272,6 +272,7 @@ class CodenfastMenu {
   CodenfastMenu({required this.title, this.description, this.image, this.onClick, this.items, this.visible, this.icon});
 
   Hero getHero() {
+
     return Hero(
       tag: title,
       child: Row(
@@ -323,28 +324,30 @@ class CodenfastMenu {
                         Expanded(
                             child: Text(
                               title,
+                              style: theme.textTheme().titleSmall,
                             )),
-                        Container(
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10)),
-                              color: Colors.red,
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Icon(
-                                FontAwesomeIcons.exclamation,
-                                color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                              decoration: const BoxDecoration(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(10)),
+                                color: Colors.red,
                               ),
-                            )),
+                              child: const Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Icon(
+                                  FontAwesomeIcons.exclamation,
+                                  color: Colors.white,
+                                  size: 10,
+                                ),
+                              )),
+                        ),
                       ],
-                    ),
-                    const SizedBox(
-                      height: 10,
                     ),
                     Expanded(
                         child: Text(
-                          description ?? "",
+                          description ?? "",style: theme.textTheme().bodySmall,
                         ))
                   ],
                 ),

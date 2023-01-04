@@ -45,7 +45,7 @@
     },
     {
       "name": "audioplayers",
-      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers-1.1.1",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -63,7 +63,7 @@
     },
     {
       "name": "audioplayers_linux",
-      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers_linux-1.0.1",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers_linux-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -84,6 +84,36 @@
       "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers_windows-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "bitsdojo_window",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/bitsdojo_window-0.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "bitsdojo_window_linux",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/bitsdojo_window_linux-0.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "bitsdojo_window_macos",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/bitsdojo_window_macos-0.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "bitsdojo_window_platform_interface",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/bitsdojo_window_platform_interface-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "bitsdojo_window_windows",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/bitsdojo_window_windows-0.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "boolean_selector",
@@ -171,9 +201,9 @@
     },
     {
       "name": "checked_yaml",
-      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/checked_yaml-2.0.1",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/checked_yaml-2.0.2",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "clock",
@@ -459,7 +489,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/image-4.0.4",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/image-4.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -483,7 +513,7 @@
     },
     {
       "name": "image_picker_ios",
-      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_ios-0.8.6+4",
+      "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_ios-0.8.6+5",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -938,12 +968,6 @@
       "languageVersion": "2.17"
     },
     {
-      "name": "window_size",
-      "rootUri": "file:///E:/flutter/.pub-cache/git/flutter-desktop-embedding-17d4710c17f4913137e7ec931f6e71eaef443363/plugins/window_size",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "xdg_directories",
       "rootUri": "file:///E:/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0+2",
       "packageUri": "lib/",
@@ -968,7 +992,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-01-01T20:41:01.560405Z",
+  "generated": "2023-01-04T02:41:07.482202Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

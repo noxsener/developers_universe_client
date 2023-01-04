@@ -122,7 +122,8 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                   padding: const EdgeInsets.all(3.0),
                                   child: Text(
                                       genreIndex.name ?? "No-Name Genre",
-                                      style: theme.textTheme.labelSmall?.copyWith(inherit: true, color: Colors.cyanAccent)),
+                                      style: theme.textTheme().labelSmall?.copyWith(inherit: true,
+                                          color: c.selectedGenreList.value.any((element) => element.id == genreIndex.id) ? Colors.white : Colors.cyanAccent)),
                                 ),
                               ),
                               onTap: (() =>
@@ -159,7 +160,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                               child: ListTile(
                                 title: Text(
                                   mediaIndex.name ?? "No-Name Music",
-                                  style: theme.textTheme.labelMedium?.copyWith(inherit: true, color: c.media?.value.id == mediaIndex.id
+                                  style: theme.textTheme().labelMedium?.copyWith(inherit: true, color: c.media?.value.id == mediaIndex.id
                                       ? Colors.black
                                       : Colors.cyan,
                                   shadows: c.media?.value.id == mediaIndex.id ? [] : theme.shadow()),
@@ -185,7 +186,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                 ),
                                 subtitle: Text(
                                   mediaIndex.attributionText ?? "",
-                                  style: theme.textTheme.bodySmall,
+                                  style: theme.textTheme().bodySmall,
                                 ),
                                 isThreeLine: true,
                                 trailing: null,
@@ -312,12 +313,12 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                       children: [
                         Text(
                           turkishToEnglishLetters(c.media!.value.name ?? "No-Name Music"),
-                          style: theme.textTheme.labelLarge?.copyWith(inherit: true, color: Colors.cyanAccent)
+                          style: theme.textTheme().labelLarge?.copyWith(inherit: true, color: Colors.cyanAccent)
                         ),
                         if (c.media != null && c.media!.value.attributionText != null)
                           Expanded(
                           child: Obx(() => Text(c.media!.value.attributionText!,
-                              style: theme.textTheme.bodySmall)),
+                              style: theme.textTheme().bodySmall)),
                         )
                       ],
                     ),
@@ -328,7 +329,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
               //       alignment: Alignment.topLeft,
               //       margin: const EdgeInsets.only(left: 5, top: 60),
               //       child: Obx(() => Text(c.media!.value.attributionText!,
-              //           style: theme.textTheme.bodySmall))),
+              //           style: theme.textTheme().bodySmall))),
               if (c.media != null && c.media!.value.attributionLink != null)
                 Container(
                     alignment: Alignment.bottomLeft,
@@ -338,7 +339,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                         launchUrl(Uri.parse(c.media!.value.attributionLink!));
                       },
                       child: Obx(() => Text(c.media!.value.attributionLink!,
-                          style: theme.textTheme.bodySmall?.copyWith(inherit: true, color: Colors.cyanAccent))),
+                          style: theme.textTheme().bodySmall?.copyWith(inherit: true, color: Colors.cyanAccent))),
                     )),
               if (c.media != null)
                 Container(
@@ -347,7 +348,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                   child: Obx(
                     () => Text(
                       "${c.position.toString().split('.').first.padLeft(8, "0")}/${c.duration.toString().split('.').first.padLeft(8, "0")}",
-    style: theme.textTheme.bodyMedium?.copyWith(inherit: true, color: Colors.cyanAccent)),
+    style: theme.textTheme().bodyMedium?.copyWith(inherit: true, color: Colors.cyanAccent)),
                     ),
                   ),
             ]),
