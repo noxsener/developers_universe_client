@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:developersuniverse_client/page/Modules/UserLogin/user-profile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,6 +25,9 @@ class _ModulesState extends State<Modules>
   void initState() {
     super.initState();
     c.initState(context, this);
+
+    if(Platform.isLinux) {setState(() {});
+    }
   }
 
   @override

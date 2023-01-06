@@ -16,13 +16,11 @@ initTranslate(BuildContext context) async {
       .loadString("assets/language/en_US.json")
       .then((value) {
     en_US = jsonDecode(value);
-    print('en_US Language Loaded');
   });
   DefaultAssetBundle.of(context)
       .loadString("assets/language/tr_TR.json")
       .then((value) {
     tr_TR = jsonDecode(value);
-    print('tr_TR Language Loaded');
   });
 }
 

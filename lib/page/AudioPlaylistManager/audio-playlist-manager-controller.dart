@@ -196,7 +196,7 @@ class AudioPlaylistManagerController extends GetxController {
       duration.refresh();
 
       if (selectedGenreList.value.isNotEmpty) {
-        mediaList.value = MyApp.mediaGenreBox!.values
+        mediaList.value = MyApp.mediaGenreBox.values
             .where((mediaGenre) => selectedGenreList.value
                 .any((genre) => mediaGenre.genre!.id == genre.id))
             .map((e) => e.media!)

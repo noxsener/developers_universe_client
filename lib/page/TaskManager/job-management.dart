@@ -114,7 +114,7 @@ class _JobManagementState extends State<JobManagement>
               return Obx(() => AnimatedContainer(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: c.job?.value?.id == jobIndex.id
+                        color: c.job?.value.id == jobIndex.id
                             ? Colors.cyan
                             : Colors.transparent),
                     duration: const Duration(milliseconds: 200),
@@ -192,8 +192,7 @@ class _JobManagementState extends State<JobManagement>
                                 ),
                                 Expanded(
                                   child: Obx(() => Text(
-                                        (jobIndex.statusMessage.value ?? "")
-                                            .trim(),
+                                        jobIndex.statusMessage.value.trim(),
                                         style: theme.textTheme().bodySmall,
                                       )),
                                 ),

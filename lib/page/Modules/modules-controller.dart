@@ -128,12 +128,9 @@ class ModulesController extends GetxController {
               padding: const EdgeInsets.all(10),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: size.width /
-                      (size.width < 900
-                          ? 1
-                          : size.width < 1200
-                          ? 2
-                          : 4),
-                  childAspectRatio: 4 / 2,
+                      (size.width < 900 ? 0.9
+                          : size.width < 1200 ? 1.8 : 3.6),
+                  childAspectRatio: 5 / 3,
                   //(size.longestSide / (size.shortestSide)),
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10),

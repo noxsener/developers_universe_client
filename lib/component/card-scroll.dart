@@ -39,7 +39,6 @@ class CardScrollWidget extends StatelessWidget {
           var start =
               padding + max(primaryCardLeft -
                   horizontalInset * -delta * (isOnRight ? 15 : 1), 0.0);
-          print(images[i].toString());
           var cardItem = Positioned.directional(
               top: padding + verticalInset * max(-delta, 0.0),
               bottom: padding + verticalInset * max(-delta, 0.0),
@@ -48,7 +47,7 @@ class CardScrollWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
                 child: Container(
-                  decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  decoration: const BoxDecoration(color: Colors.white, boxShadow: [
                     BoxShadow(color: Colors.black12,
                         offset: Offset(3.0, 6.0),
                         blurRadius: 10.0)

@@ -77,7 +77,6 @@ class JobManagementController extends GetxController {
       basejob.progress.value = 100;
       basejob.progress.refresh();
       basejob.isDone.value = true;
-      basejob.statusMessage ??= "List Updated".obs;
       basejob.statusMessage.value = "List Updated: $totalCount row/s processed";
       basejob.statusMessage.refresh();
       showSnackBar(context, "Music list updated: $totalCount row/s processed for offline usage");
@@ -87,7 +86,6 @@ class JobManagementController extends GetxController {
       basejob.isDone.value = true;
       basejob.doneWithError.value = true;
       basejob.doneWithError.refresh();
-      basejob.statusMessage ??= e.toString().obs;
       basejob.statusMessage.value = e.toString();
       basejob.statusMessage.refresh();
       showSnackBar(context, "Music list failed: $e");
@@ -98,7 +96,6 @@ class JobManagementController extends GetxController {
       job!.value.isDone.value = true;
       job!.value.doneWithError.value = true;
       job!.value.doneWithError.refresh();
-      job!.value.statusMessage ??= error.toString().obs;
       job!.value.statusMessage.value = error.toString();
       job!.value.statusMessage.refresh();
       showSnackBar(context, "Music list failed: $error");

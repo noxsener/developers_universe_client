@@ -241,6 +241,418 @@ class ErrorObject implements JsonConvertable {
   }
 }
 
+class User implements JsonConvertable {
+  String? id;
+  bool? passive;
+  DateTime? createTime;
+  DateTime? updateTime;
+
+  String? username;
+  String? name;
+  String? surname;
+  String? bio;
+  String? language;
+  DateTime? birthDate;
+  String? email;
+  DateTime? lastTokenTime;
+  List<UserAuthorization>? userAuthorizationList;
+  List<UserRole>? userRoleList;
+
+
+  User({
+      this.id,
+      this.passive,
+      this.createTime,
+      this.updateTime,
+      this.username,
+      this.name,
+      this.surname,
+      this.bio,
+      this.language,
+      this.birthDate,
+      this.email,
+      this.lastTokenTime,
+      this.userAuthorizationList,
+      this.userRoleList});
+
+  User.fromJSON(Map<String, dynamic> json) {
+    if(json['id'] != null) {
+      id = json['id'];
+    }
+    if(json['passive'] != null) {
+      passive = json['passive'];
+    }
+    if(json['createTime'] != null) {
+      createTime = DateTime.parse(json['createTime']);
+    }
+    if(json['updateTime'] != null) {
+      updateTime = DateTime.parse(json['updateTime']);
+    }
+    if(json['username'] != null) {
+      username = json['username'];
+    }
+    if(json['name'] != null) {
+      name = json['name'];
+    }
+    if(json['surname'] != null) {
+      surname = json['surname'];
+    }
+    if(json['bio'] != null) {
+      bio = json['bio'];
+    }
+    if(json['language'] != null) {
+      language = json['language'];
+    }
+    if(json['birthDate'] != null) {
+      birthDate = DateTime.parse(json['birthDate']);
+    }
+    if(json['email'] != null) {
+      email = json['email'];
+    }
+    if(json['lastTokenTime'] != null) {
+      lastTokenTime = DateTime.parse(json['lastTokenTime']);
+    }
+    if(json['lastTokenTime'] != null) {
+      userAuthorizationList =
+      json['lastTokenTime'] != null ? json['lastTokenTime'].map<
+          DownloadPart>((i) => UserAuthorization.fromJSON(i)).toList() : [];
+    }
+    if(json['userRoleList'] != null) {
+      userRoleList =
+      json['userRoleList'] != null ? json['userRoleList'].map<
+          DownloadPart>((i) => UserRole.fromJSON(i)).toList() : [];
+    }
+  }
+
+  @override
+  toJson(){
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if(id != null) {
+      data['id'] = id;
+    }
+    if(passive != null) {
+      data['passive'] = passive;
+    }
+    if(createTime != null) {
+      data['createTime'] = createTime!.toIso8601String();
+    }
+    if(updateTime != null) {
+      data['updateTime'] = updateTime!.toIso8601String();
+    }
+    if(username != null) {
+      data['username'] = username;
+    }
+    if(name != null) {
+      data['name'] = name;
+    }
+    if(surname != null) {
+      data['surname'] = surname;
+    }
+    if(bio != null) {
+      data['bio'] = bio;
+    }
+    if(language != null) {
+      data['language'] = language;
+    }
+    if(birthDate != null) {
+      data['birthDate'] = birthDate!.toIso8601String();
+    }
+    if(email != null) {
+      data['email'] = email;
+    }
+    if(lastTokenTime != null) {
+      data['lastTokenTime'] = lastTokenTime!.toIso8601String();
+    }
+    if(userAuthorizationList != null) {
+      data['userAuthorizationList'] = userAuthorizationList;
+    }
+    if(userRoleList != null) {
+      data['userRoleList'] = userRoleList;
+    }
+    return data;
+  }
+}
+
+class UserRole implements JsonConvertable {
+  DateTime? createTime;
+  String? id;
+  String? name;
+  bool? passive;
+  List<Role>? roleList;
+  DateTime? updateTime;
+  User? user;
+
+  UserRole({this.createTime, this.id, this.name, this.passive, this.roleList, this.updateTime, this.user, });
+
+  UserRole.fromJSON(Map<String, dynamic> json) {
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['name'] != null) {
+      name = json['name'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    roleList = json['roleList'] != null ? json['roleList'].map<Role>((i) => Role.fromJSON(i)).toList() : [];
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    user = json['user'] != null ? User.fromJSON(json['user']) : null;
+  }
+
+  @override
+  toJson() {final Map<String, dynamic> data = <String, dynamic>{};
+  if (createTime != null) {
+    data['createTime'] = createTime!.toIso8601String;
+  }
+  if (id != null) {
+    data['id'] = id;
+  }
+  if (name != null) {
+    data['name'] = name;
+  }
+  if (passive != null) {
+    data['passive'] = passive;
+  }
+  if (roleList != null) {
+    data['roleList'] = roleList;
+  }
+  if (updateTime != null) {
+    data['updateTime'] = updateTime!.toIso8601String;
+  }
+  if (user != null) {
+    data['user'] = user;
+  }
+  return data;
+  }
+
+}
+
+
+class UserAuthorization implements JsonConvertable {
+  Authorization? authorization;
+  DateTime? createTime;
+  String? grant;
+  String? id;
+  bool? passive;
+  DateTime? updateTime;
+  User? user;
+
+  UserAuthorization({this.authorization, this.createTime, this.grant, this.id, this.passive, this.updateTime, this.user, });
+
+  UserAuthorization.fromJSON(Map<String, dynamic> json) {
+    authorization = json['authorization'] != null ? Authorization.fromJSON(json['authorization']) : null;
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['grant'] != null) {
+      grant = json['grant'];
+    }
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    user = json['user'] != null ? User.fromJSON(json['user']) : null;
+  }
+
+  @override
+  toJson() {final Map<String, dynamic> data = <String, dynamic>{};
+  if (authorization != null) {
+    data['authorization'] = authorization;
+  }
+  if (createTime != null) {
+    data['createTime'] = createTime!.toIso8601String;
+  }
+  if (grant != null) {
+    data['grant'] = grant;
+  }
+  if (id != null) {
+    data['id'] = id;
+  }
+  if (passive != null) {
+    data['passive'] = passive;
+  }
+  if (updateTime != null) {
+    data['updateTime'] = updateTime!.toIso8601String;
+  }
+  if (user != null) {
+    data['user'] = user;
+  }
+  return data;
+  }
+
+}
+
+
+class Authorization implements JsonConvertable {
+  DateTime? createTime;
+  bool? grant;
+  String? id;
+  String? name;
+  bool? passive;
+  List<RoleAuthorization>? roleAuthorizationList;
+  DateTime? updateTime;
+  List<UserAuthorization>? userAuthorizationList;
+
+  Authorization({this.createTime, this.grant, this.id, this.name, this.passive, this.roleAuthorizationList, this.updateTime, this.userAuthorizationList, });
+
+  Authorization.fromJSON(Map<String, dynamic> json) {
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['grant'] != null) {
+      grant = json['grant'];
+    }
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['name'] != null) {
+      name = json['name'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    roleAuthorizationList = json['roleAuthorizationList'] != null ? json['roleAuthorizationList'].map<RoleAuthorization>((i) => RoleAuthorization.fromJSON(i)).toList() : [];
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    userAuthorizationList = json['userAuthorizationList'] != null ? json['userAuthorizationList'].map<UserAuthorization>((i) => UserAuthorization.fromJSON(i)).toList() : [];
+  }
+
+  @override
+  toJson() {final Map<String, dynamic> data = <String, dynamic>{};
+  if (createTime != null) {
+    data['createTime'] = createTime!.toIso8601String;
+  }
+  if (grant != null) {
+    data['grant'] = grant;
+  }
+  if (id != null) {
+    data['id'] = id;
+  }
+  if (name != null) {
+    data['name'] = name;
+  }
+  if (passive != null) {
+    data['passive'] = passive;
+  }
+  if (roleAuthorizationList != null) {
+    data['roleAuthorizationList'] = roleAuthorizationList;
+  }
+  if (updateTime != null) {
+    data['updateTime'] = updateTime!.toIso8601String;
+  }
+  if (userAuthorizationList != null) {
+    data['userAuthorizationList'] = userAuthorizationList;
+  }
+  return data;
+  }
+
+}
+
+class RoleAuthorization implements JsonConvertable {
+  Authorization? authorization;
+  DateTime? createTime;
+  String? grant;
+  String? id;
+  bool? passive;
+  Role? role;
+  DateTime? updateTime;
+
+  RoleAuthorization({this.authorization, this.createTime, this.grant, this.id, this.passive, this.role, this.updateTime, });
+
+  RoleAuthorization.fromJSON(Map<String, dynamic> json) {
+    authorization = json['authorization'] != null ? Authorization.fromJSON(json['authorization']) : null;
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['grant'] != null) {
+      grant = json['grant'];
+    }
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    role = json['role'] != null ? Role.fromJSON(json['role']) : null;
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+  }
+
+  @override
+  toJson() {final Map<String, dynamic> data = <String, dynamic>{};
+  if (authorization != null) {
+    data['authorization'] = authorization;
+  }
+  if (createTime != null) {
+    data['createTime'] = createTime!.toIso8601String;
+  }
+  if (grant != null) {
+    data['grant'] = grant;
+  }
+  if (id != null) {
+    data['id'] = id;
+  }
+  if (passive != null) {
+    data['passive'] = passive;
+  }
+  if (role != null) {
+    data['role'] = role;
+  }
+  if (updateTime != null) {
+    data['updateTime'] = updateTime!.toIso8601String;
+  }
+  return data;
+  }
+
+}
+
+class Role implements JsonConvertable {
+  DateTime? createTime;
+  String? id;
+  String? name;
+  bool? passive;
+  List<RoleAuthorization>? roleAuthorizationList;
+  DateTime? updateTime;
+
+  Role({this.createTime, this.id, this.name, this.passive, this.roleAuthorizationList, this.updateTime, });
+
+  Role.fromJSON(Map<String, dynamic> json) {
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['name'] != null) {
+      name = json['name'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    roleAuthorizationList = json['roleAuthorizationList'] != null ? json['roleAuthorizationList'].map<RoleAuthorization>((i) => RoleAuthorization.fromJSON(i)).toList() : [];
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+  }
+
+  @override
+  toJson() {final Map<String, dynamic> data = <String, dynamic>{};
+  if (createTime != null) {
+    data['createTime'] = createTime!.toIso8601String;
+  }
+  if (id != null) {
+    data['id'] = id;
+  }
+  if (name != null) {
+    data['name'] = name;
+  }
+  if (passive != null) {
+    data['passive'] = passive;
+  }
+  if (roleAuthorizationList != null) {
+    data['roleAuthorizationList'] = roleAuthorizationList;
+  }
+  if (updateTime != null) {
+    data['updateTime'] = updateTime!.toIso8601String;
+  }
+  return data;
+  }
+
+}
+
+
 class RequestObject implements JsonConvertable {
   List<dynamic>? data;
 

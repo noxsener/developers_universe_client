@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:developersuniverse_client/page/AudioPlaylistManager/audio-playlist-manager-controller.dart';
@@ -26,6 +28,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
   void initState() {
     super.initState();
     c.initState(context, this);
+    if(Platform.isLinux) {setState(() {});}
   }
 
 
@@ -126,8 +129,9 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                           color: c.selectedGenreList.value.any((element) => element.id == genreIndex.id) ? Colors.white : Colors.cyanAccent)),
                                 ),
                               ),
-                              onTap: (() =>
-                                  c.genreListOnClick(context, genreIndex)),
+                              onTap: (() {
+                                  c.genreListOnClick(context, genreIndex);
+                                if(Platform.isLinux) {setState(() {});}})
                             );
                           }),
                     ),
@@ -191,7 +195,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                                 isThreeLine: true,
                                 trailing: null,
                                 //const Icon(Icons.download, color: Colors.white70,),
-                                onTap: (() => c.mediaListOnClick(index)),
+                                onTap: (() { c.mediaListOnClick(index);if(Platform.isLinux) {setState(() {});}}),
                                 onLongPress: (() async {
                                   if (mediaIndex.attributionLink == null) {
                                     return;
@@ -613,7 +617,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget startButton() {
     return IconButton(
-      onPressed: () => c.startButtonOnClick(),
+      onPressed: () {c.startButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
       iconSize: 30,
       icon: AnimatedIcon(
         icon: AnimatedIcons.play_pause,
@@ -628,7 +632,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
   Widget previousButton() {
     return IconButton(
         iconSize: 30,
-        onPressed: () => c.previousButtonOnClick(),
+        onPressed: (){ c.previousButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
         icon: const Icon(
           Icons.fast_rewind,
           color: Colors.grey,
@@ -640,6 +644,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
       iconSize: 30,
       onPressed: () {
         c.nextMedia();
+        if(Platform.isLinux) {setState(() {});}
       },
       icon: const Icon(
         Icons.fast_forward,
@@ -651,7 +656,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
   Widget loopButton() {
     return IconButton(
       iconSize: 30,
-      onPressed: () => c.loopButtonOnClick(),
+      onPressed: () { c.loopButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
       icon: Icon(
         Icons.loop,
         color: c.isLoop.isTrue ? Colors.cyan : Colors.grey,
@@ -670,7 +675,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
   Widget stopButton() {
     return IconButton(
       iconSize: 30,
-      onPressed: () => c.stopButtonOnClick(),
+      onPressed: () {c.stopButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
       icon: Obx(() => Icon(Icons.stop,
           color: c.audioPlayer.value.state == PlayerState.stopped
               ? Colors.cyan

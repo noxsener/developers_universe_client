@@ -25,8 +25,8 @@ void main() async {
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     doWhenWindowReady(() {
       final win = appWindow;
-      const initialSize = Size(500, 600);
-      win.minSize = initialSize;
+      const initialSize = Size(800, 600);
+      win.minSize = const Size(500,600);
       win.size = initialSize;
       win.alignment = Alignment.center;
       win.title = "Developers Universe";
@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               children: [
                 Expanded(child: SizedBox(height: 28,child: MoveWindow())),
                 WindowBorder(
-                    color: theme.blackTransparent, child: const WindowButtons()),
+                    color: Colors.black, child: const WindowButtons()),
               ],
             ),
             Expanded(

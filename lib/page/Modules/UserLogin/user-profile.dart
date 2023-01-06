@@ -11,6 +11,7 @@ import '../../../webservices/user-profile-service.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
+  static String? token;
 
   @override
   State<UserProfile> createState() => _UserProfileState();
@@ -37,13 +38,13 @@ class _UserProfileState extends State<UserProfile>
   @override
   bool get wantKeepAlive => true;
 
-  void kayitOl() {
+  void register() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return SizedBox();  //RegisterPage(dataContext: dataContext);
     }));
   }
 
-  void sifremiUnuttum() {
+  void restorePassword() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return SizedBox(); //ForgotPasswordPage();
     }));
@@ -53,25 +54,19 @@ class _UserProfileState extends State<UserProfile>
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    String? token = await loginCall(context, username, password);
-    showAlertDialog(context, Text("Login Success", style: theme.textTheme().titleSmall,), Text(token ?? "???", style: theme.textTheme().bodySmall,), [
-      TextButton(
-          onPressed: () => {
-            Navigator.pop(context)
-          },
-          child: Text(
-            transform("accept"),
-            style: theme.textTheme().button,
-          ))
-    ]);
+    UserProfile.token = await loginCall(context, username, password);
+    if(UserProfile.token == null) {
+      return;
+    }
+
   }
 
 
-  Widget getKayitOlButton() {
+  Widget registerButton() {
     return ElevatedButton(
       style: theme.positiveButtonStyle(),
       onPressed: () {
-        kayitOl();
+        register();
       },
       child: Text(
         transform("register"),
@@ -80,11 +75,11 @@ class _UserProfileState extends State<UserProfile>
     );
   }
 
-  Widget sifremiUnuttumButton() {
+  Widget restorePasswordButton() {
     return ElevatedButton(
       style: theme.negativeButtonStyle(),
       onPressed: () {
-        sifremiUnuttum();
+        restorePassword();
       },
       child: Text(
         transform("forgotPassword"),
