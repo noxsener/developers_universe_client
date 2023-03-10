@@ -4,23 +4,28 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:developersuniverse_client/models/common-model.dart';
 import 'package:developersuniverse_client/page/Modules/modules.dart';
 import 'package:developersuniverse_client/page/TaskManager/job-management.dart';
+import 'package:developersuniverse_client/services/admob-service.dart';
 import 'package:developersuniverse_client/services/common-service.dart';
 import 'package:developersuniverse_client/services/jobService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import 'page/AudioPlaylistManager/audio-playlist-manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  registerHiveAdapters();
   if (Platform.isAndroid || Platform.isIOS) {
     ByteData data = await PlatformAssetBundle()
         .load('assets/trusted-certs/lets-encrypt-r3.pem');
     SecurityContext.defaultContext
         .setTrustedCertificatesBytes(data.buffer.asUint8List());
+    await MobileAds.instance.initialize();
   }
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     doWhenWindowReady(() {
@@ -33,20 +38,18 @@ void main() async {
       win.show();
     });
   }
-  await Hive.initFlutter();
-  registerHiveAdapters();
   initTimerTasks();
   MyApp appInstance = const MyApp();
-  await Hive.openBox<MediaGenre>("MediaGenre")
-      .then((mediaGenreBox) => MyApp.mediaGenreBox = mediaGenreBox);
-  await Hive.openBox<Genre>("Genre")
-      .then((genreBox) => MyApp.genreBox = genreBox);
-  await Hive.openBox<Media>("Media")
-      .then((mediaBox) => MyApp.mediaBox = mediaBox);
+  await Hive.openBox<MediaGenre>("MediaGenre").then((mediaGenreBox) => MyApp.mediaGenreBox = mediaGenreBox);
+  await Hive.openBox<Genre>("Genre").then((genreBox) => MyApp.genreBox = genreBox);
+  await Hive.openBox<Media>("Media").then((mediaBox) => MyApp.mediaBox = mediaBox);
   await Hive.openBox<MediaDownloadSource>("MediaDownloadSource").then(
       (mediaDownloadSourceBox) =>
           MyApp.mediaDownloadSourceBox = mediaDownloadSourceBox);
   // await Hive.openBox<Media>("ApplicationModules").then((applicationModules) => MyApp.applicationModules = applicationModules);
+  await Hive.openBox<ElectronicArchive>("ElectronicArchive").then((electronicArchive) => MyApp.electronicArchiveBox = electronicArchive);
+  await Hive.openBox<ElectronicArchiveProperty>("ElectronicArchiveProperty").then((electronicArchiveProperty) => MyApp.electronicArchivePropertyBox = electronicArchiveProperty);
+  await Hive.openBox<ElectronicArchivePropertyValue>("ElectronicArchivePropertyValue").then((electronicArchivePropertyValue) => MyApp.electronicArchivePropertyValueBox = electronicArchivePropertyValue);
   runApp(appInstance);
 }
 
@@ -57,13 +60,16 @@ class MyApp extends StatelessWidget {
   static late Box<Media> mediaBox;
   static late Box<MediaGenre> mediaGenreBox;
   static late Box<MediaDownloadSource> mediaDownloadSourceBox;
+  static late Box<ElectronicArchive> electronicArchiveBox;
+  static late Box<ElectronicArchiveProperty> electronicArchivePropertyBox;
+  static late Box<ElectronicArchivePropertyValue> electronicArchivePropertyValueBox;
+
 
   // static late Box<ApplicationModules> applicationModules;
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Developers Universe',
         theme: ThemeData(
             useMaterial3: true,
             primarySwatch: theme.blackTransparent,
@@ -79,6 +85,9 @@ class MyApp extends StatelessWidget {
               backgroundColor: theme.cyanTransparent[500],
               iconColor: Colors.white,
               titleTextStyle: theme.textTheme().titleSmall,
+              elevation: 2,
+              alignment: Alignment.centerLeft,
+              actionsPadding: EdgeInsets.all(20)
             ),
             focusColor: Colors.cyan,
             appBarTheme: AppBarTheme(
@@ -88,7 +97,7 @@ class MyApp extends StatelessWidget {
                 titleTextStyle: theme.textTheme().titleLarge,
                 toolbarTextStyle: theme.textTheme().bodySmall,
                 centerTitle: true,
-            toolbarHeight: 25),
+            toolbarHeight: 0),
             bannerTheme: MaterialBannerThemeData(
               backgroundColor: theme.blackTransparent,
             )),
@@ -119,6 +128,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   TabController? _tabController;
 
   JobManagement jobManagement = const JobManagement();
+  AdMobService adMobService = AdMobService();
+
 
   @override
   void initState() {
@@ -127,8 +138,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    if(Platform.isAndroid || Platform.isIOS) {
+      AdMobService.bannerAd?.dispose();
+      // AdMobService.interstitialAd?.dispose();
+      // AdMobService.rewardedAd?.dispose();
+      // AdMobService.rewardedInterstitialAd?.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    initAds();
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
       return SafeArea(
@@ -158,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   backgroundColor: Colors.transparent,
                   appBar: AppBar(
                     bottom: TabBar(
+                      physics: const NeverScrollableScrollPhysics(),
                       tabs: [
                         Tab(
                           child: Row(
@@ -206,7 +230,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       ),
                       controller: _tabController,
                     ),
-                    title: const Text('Developers Universe'),
                   ),
                   body: TabBarView(
                     controller: _tabController,
@@ -219,6 +242,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       jobManagement
                     ],
                   ),
+                  bottomNavigationBar:getAdBanner(),
                 ),
               ),
             ),
@@ -227,6 +251,39 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       );
     });
   }
+
+  void initAds() {
+    if(!Platform.isAndroid && !Platform.isIOS) {
+      return;
+    }
+    if(AdMobService.bannerAd == null) {
+      adMobService.createBanerAd(MediaQuery.of(context).size);
+    }
+
+    // adMobService.createInterstitialAd();
+    // adMobService.createRewardedAd();
+    // adMobService.createRewardedInterstitialAd();
+  }
+
+  Widget getAdBanner() {
+    Widget empty = const SizedBox();
+    if(!Platform.isAndroid && !Platform.isIOS) {
+      AdMobService.bannerAd?.dispose().then((value) => AdMobService.bannerAd = null);
+      return empty;
+    }
+    if(AdMobService.bannerAd == null) {
+      return empty;
+    }
+    AdWidget adWidget = AdWidget(ad: AdMobService.bannerAd!);
+    AdSize adSize = AdMobService().getBannerAdSize(MediaQuery.of(context).size);
+    return Container(
+      alignment: Alignment.center,
+      width: adSize.width.toDouble(),
+      height: adSize.height.toDouble(),
+      child: adWidget,
+    );
+  }
+
 }
 
 final buttonColors = WindowButtonColors(

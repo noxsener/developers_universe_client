@@ -9,6 +9,7 @@ import 'package:http_parser/src/media_type.dart';
 import 'package:intl/intl.dart';
 
 import '../models/common-model.dart';
+import '../page/Modules/UserProfile/user-profile.dart';
 import 'application-properties.dart';
 
 String get keyString {
@@ -44,13 +45,20 @@ class HClient {
   Map<String, String> getDefaultHeaders() {
     Map<String, String> headers = {
       "Content-Type": "application/json",
-      aHeader: dateFormatDetailed.format(now)
+      aHeader: dateFormatDetailed.format(now),
+      if (UserProfile.token != null)
+        "Authorization": "Bearer ${UserProfile.token}"
     };
     return headers;
   }
 
-  Map<String, String> getDefaultHeadersCrypted(String iv, {Map<String, String>? headers}) {
-    headers ??= {"Content-Type": "text/plain"};
+  Map<String, String> getDefaultHeadersCrypted(String iv,
+      {Map<String, String>? headers}) {
+    headers ??= {
+      "Content-Type": "text/plain",
+      if (UserProfile.token != null)
+        "Authorization": "Bearer ${UserProfile.token}"
+    };
     headers[aHeader] = iv;
     return headers;
   }
@@ -61,8 +69,8 @@ class HClient {
         headers: (headers != null) ? headers : getDefaultHeaders());
   }
 
-  Future<http.Response> post(String path, {JsonConvertable? object,
-      Map<String, String>? headers}) async {
+  Future<http.Response> post(String path,
+      {JsonConvertable? object, Map<String, String>? headers}) async {
     String data = dateFormatPlain.format(now.toUtc());
     String iv = getIvString(data);
     String? json;

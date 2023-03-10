@@ -81,7 +81,7 @@ class _JobManagementState extends State<JobManagement>
     return Container(
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(width: 2.0, color: Colors.black),
           gradient: const LinearGradient(
               begin: Alignment.topCenter,
@@ -113,7 +113,7 @@ class _JobManagementState extends State<JobManagement>
               BaseJob jobIndex = JobManagementController.jobList[index];
               return Obx(() => AnimatedContainer(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(10),
                         color: c.job?.value.id == jobIndex.id
                             ? Colors.cyan
                             : Colors.transparent),

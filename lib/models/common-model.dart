@@ -283,10 +283,11 @@ class User implements JsonConvertable {
       passive = json['passive'];
     }
     if(json['createTime'] != null) {
-      createTime = DateTime.parse(json['createTime']);
+
+      createTime = DateTime(json['createTime'][0],json['createTime'][1],json['createTime'][2],json['createTime'][3],json['createTime'][4],json['createTime'][5],json['createTime'][6]);
     }
     if(json['updateTime'] != null) {
-      updateTime = DateTime.parse(json['updateTime']);
+      updateTime = DateTime(json['updateTime'][0],json['updateTime'][1],json['updateTime'][2],json['updateTime'][3],json['updateTime'][4],json['updateTime'][5],json['updateTime'][6]);
     }
     if(json['username'] != null) {
       username = json['username'];
@@ -304,7 +305,7 @@ class User implements JsonConvertable {
       language = json['language'];
     }
     if(json['birthDate'] != null) {
-      birthDate = DateTime.parse(json['birthDate']);
+      birthDate = DateTime(json['birthDate'][0],json['birthDate'][1],json['birthDate'][2],json['birthDate'][3],json['birthDate'][4],json['birthDate'][5],json['birthDate'][6]);
     }
     if(json['email'] != null) {
       email = json['email'];
@@ -323,6 +324,7 @@ class User implements JsonConvertable {
           DownloadPart>((i) => UserRole.fromJSON(i)).toList() : [];
     }
   }
+
 
   @override
   toJson(){
@@ -372,6 +374,42 @@ class User implements JsonConvertable {
     return data;
   }
 }
+
+class LoginUserModel implements JsonConvertable {
+  String? pass;
+  String? refreshToken;
+  String? username;
+
+  LoginUserModel({this.pass, this.refreshToken, this.username, });
+
+  LoginUserModel.fromJSON(Map<String, dynamic> json) {
+    if (json['pass'] != null) {
+      pass = json['pass'];
+    }
+    if (json['refreshToken'] != null) {
+      refreshToken = json['refreshToken'];
+    }
+    if (json['username'] != null) {
+      username = json['username'];
+    }
+  }
+
+  @override
+  toJson() {final Map<String, dynamic> data = <String, dynamic>{};
+  if (pass != null) {
+    data['pass'] = pass;
+  }
+  if (refreshToken != null) {
+    data['refreshToken'] = refreshToken;
+  }
+  if (username != null) {
+    data['username'] = username;
+  }
+  return data;
+  }
+
+}
+
 
 class UserRole implements JsonConvertable {
   DateTime? createTime;
@@ -1445,4 +1483,301 @@ class MediaGenre extends HiveObject implements JsonConvertable {
   }
 
 }
+
+@HiveType(typeId: 8)
+class ElectronicArchive implements JsonConvertable {
+  @HiveField(0)
+  DateTime? createTime;
+  @HiveField(1)
+  String? description;
+  @HiveField(2)
+  ElectronicArchive? electronicArchiveFolder;
+  @HiveField(3)
+  List<ElectronicArchive>? electronicArchiveList;
+  @HiveField(4)
+  String? fileBase64;
+  @HiveField(5)
+  String? fileLocation;
+  @HiveField(6)
+  String? fileName;
+  @HiveField(7)
+  int? height;
+  @HiveField(8)
+  String? id;
+  @HiveField(9)
+  bool? isFolder;
+  @HiveField(10)
+  String? mimeType;
+  @HiveField(11)
+  String? name;
+  @HiveField(12)
+  bool? passive;
+  @HiveField(13)
+  int? size;
+  @HiveField(14)
+  DateTime? updateTime;
+  @HiveField(15)
+  int? width;
+  @HiveField(16)
+  String? zipMimeType;
+
+  ElectronicArchive({this.createTime, this.description, this.electronicArchiveFolder, this.electronicArchiveList, this.fileBase64, this.fileLocation, this.fileName, this.height, this.id, this.isFolder, this.mimeType, this.name, this.passive, this.size, this.updateTime, this.width, this.zipMimeType, });
+
+  ElectronicArchive.fromJSON(Map<String, dynamic> json) {
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['description'] != null) {
+      description = json['description'];
+    }
+    electronicArchiveFolder = json['electronicArchiveFolder'] != null ? ElectronicArchive.fromJSON(json['electronicArchiveFolder']) : null;
+    electronicArchiveList = json['electronicArchiveList'] != null ? json['electronicArchiveList'].map<ElectronicArchive>((i) => ElectronicArchive.fromJSON(i)).toList() : [];
+    if (json['fileBase64'] != null) {
+      fileBase64 = json['fileBase64'];
+    }
+    if (json['fileLocation'] != null) {
+      fileLocation = json['fileLocation'];
+    }
+    if (json['fileName'] != null) {
+      fileName = json['fileName'];
+    }
+    if (json['height'] != null) {
+      height = json['height'];
+    }
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['isFolder'] != null) {
+      isFolder = json['isFolder'];
+    }
+    if (json['mimeType'] != null) {
+      mimeType = json['mimeType'];
+    }
+    if (json['name'] != null) {
+      name = json['name'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    if (json['size'] != null) {
+      size = json['size'];
+    }
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    if (json['width'] != null) {
+      width = json['width'];
+    }
+    if (json['zipMimeType'] != null) {
+      zipMimeType = json['zipMimeType'];
+    }
+  }
+
+  @override
+  toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (createTime != null) {
+      data['createTime'] = createTime!.toIso8601String;
+    }
+    if (description != null) {
+      data['description'] = description;
+    }
+    if (electronicArchiveFolder != null) {
+      data['electronicArchiveFolder'] = electronicArchiveFolder;
+    }
+    if (electronicArchiveList != null) {
+      data['electronicArchiveList'] = electronicArchiveList;
+    }
+    if (fileBase64 != null) {
+      data['fileBase64'] = fileBase64;
+    }
+    if (fileLocation != null) {
+      data['fileLocation'] = fileLocation;
+    }
+    if (fileName != null) {
+      data['fileName'] = fileName;
+    }
+    if (height != null) {
+      data['height'] = height;
+    }
+    if (id != null) {
+      data['id'] = id;
+    }
+    if (isFolder != null) {
+      data['isFolder'] = isFolder;
+    }
+    if (mimeType != null) {
+      data['mimeType'] = mimeType;
+    }
+    if (name != null) {
+      data['name'] = name;
+    }
+    if (passive != null) {
+      data['passive'] = passive;
+    }
+    if (size != null) {
+      data['size'] = size;
+    }
+    if (updateTime != null) {
+      data['updateTime'] = updateTime!.toIso8601String;
+    }
+    if (width != null) {
+      data['width'] = width;
+    }
+    if (zipMimeType != null) {
+      data['zipMimeType'] = zipMimeType;
+    }
+    return data;
+  }
+
+}
+
+
+@HiveType(typeId: 9)
+class ElectronicArchiveProperty implements JsonConvertable {
+  @HiveField(0)
+  DateTime? createTime;
+  @HiveField(1)
+  String? description;
+  @HiveField(2)
+  String? id;
+  @HiveField(3)
+  String? name;
+  @HiveField(4)
+  bool? passive;
+  @HiveField(5)
+  DateTime? updateTime;
+  @HiveField(6)
+  String? valueType;
+
+  ElectronicArchiveProperty({this.createTime, this.description, this.id, this.name, this.passive, this.updateTime, this.valueType, });
+
+  ElectronicArchiveProperty.fromJSON(Map<String, dynamic> json) {
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    if (json['description'] != null) {
+      description = json['description'];
+    }
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['name'] != null) {
+      name = json['name'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    if (json['valueType'] != null) {
+      valueType = json['valueType'];
+    }
+  }
+
+  @override
+  toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (createTime != null) {
+      data['createTime'] = createTime!.toIso8601String;
+    }
+    if (description != null) {
+      data['description'] = description;
+    }
+    if (id != null) {
+      data['id'] = id;
+    }
+    if (name != null) {
+      data['name'] = name;
+    }
+    if (passive != null) {
+      data['passive'] = passive;
+    }
+    if (updateTime != null) {
+      data['updateTime'] = updateTime!.toIso8601String;
+    }
+    if (valueType != null) {
+      data['valueType'] = valueType;
+    }
+    return data;
+  }
+
+}
+
+@HiveType(typeId: 10)
+class ElectronicArchivePropertyValue implements JsonConvertable {
+  @HiveField(0)
+  bool? booleanValue;
+  @HiveField(1)
+  DateTime? createTime;
+  @HiveField(2)
+  DateTime? dateValue;
+  @HiveField(3)
+  ElectronicArchiveProperty? electronicArchiveProperty;
+  @HiveField(4)
+  String? id;
+  @HiveField(5)
+  double? numberValue;
+  @HiveField(6)
+  bool? passive;
+  @HiveField(7)
+  String? stringValue;
+  @HiveField(8)
+  DateTime? updateTime;
+
+  ElectronicArchivePropertyValue({this.booleanValue, this.createTime, this.dateValue, this.electronicArchiveProperty, this.id, this.numberValue, this.passive, this.stringValue, this.updateTime, });
+
+  ElectronicArchivePropertyValue.fromJSON(Map<String, dynamic> json) {
+    if (json['booleanValue'] != null) {
+      booleanValue = json['booleanValue'];
+    }
+    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    dateValue = json['dateValue'] != null ? DateTime.parse(json['dateValue']) : null;
+    electronicArchiveProperty = json['electronicArchiveProperty'] != null ? ElectronicArchiveProperty.fromJSON(json['electronicArchiveProperty']) : null;
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['numberValue'] != null) {
+      numberValue = json['numberValue'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    if (json['stringValue'] != null) {
+      stringValue = json['stringValue'];
+    }
+    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+  }
+
+  @override
+  toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (booleanValue != null) {
+      data['booleanValue'] = booleanValue;
+    }
+    if (createTime != null) {
+      data['createTime'] = createTime!.toIso8601String;
+    }
+    if (dateValue != null) {
+      data['dateValue'] = dateValue!.toIso8601String;
+    }
+    if (electronicArchiveProperty != null) {
+      data['electronicArchiveProperty'] = electronicArchiveProperty;
+    }
+    if (id != null) {
+      data['id'] = id;
+    }
+    if (numberValue != null) {
+      data['numberValue'] = numberValue;
+    }
+    if (passive != null) {
+      data['passive'] = passive;
+    }
+    if (stringValue != null) {
+      data['stringValue'] = stringValue;
+    }
+    if (updateTime != null) {
+      data['updateTime'] = updateTime!.toIso8601String;
+    }
+    return data;
+  }
+
+}
+
+
+
+
 

@@ -1,16 +1,17 @@
 import 'dart:io';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:developersuniverse_client/page/AudioPlaylistManager/audio-playlist-manager-controller.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:multiselect/multiselect.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../component/MusicCard.dart';
 import '../../models/common-model.dart';
 import '../../services/common-service.dart';
-import '../../webservices/audio-playlist-manager-service.dart';
 
 class AudioPlaylistManager extends StatefulWidget {
   const AudioPlaylistManager({Key? key}) : super(key: key);
@@ -20,23 +21,29 @@ class AudioPlaylistManager extends StatefulWidget {
 }
 
 class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<AudioPlaylistManager> {
+    with
+        TickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<AudioPlaylistManager> {
   final c = Get.put(AudioPlaylistManagerController());
   bool landscape = false;
+  late Size size;
 
   @override
   void initState() {
     super.initState();
     c.initState(context, this);
-    if(Platform.isLinux) {setState(() {});}
+    if (Platform.isLinux) {
+      setState(() {});
+    }
   }
-
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
+    print('Width: ${size.width}, height: ${size.height}');
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
       return Scaffold(
@@ -68,7 +75,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
       child: Container(
         decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(width: 2.0, color: Colors.black),
             gradient: const LinearGradient(
                 begin: Alignment.topCenter,
@@ -90,53 +97,49 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                   spreadRadius: -7),
             ]),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
+          padding: const EdgeInsets.all(4),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
-                  flex: 3,
-                  child: RawScrollbar(
-                    thumbColor: Colors.cyanAccent,
-                    trackVisibility: true,
-                    thickness: 5,
-                    thumbVisibility: true,
-                    controller: c.genreScrollController,
-                    child: Obx(
-                      () => ListView.builder(
-                          controller: c.genreScrollController,
-                          itemCount: c.genreList.length,
-                          itemBuilder: (context, index) {
-                            if (index >= c.genreList.length) {
-                              return const SizedBox();
-                            }
-                            Genre genreIndex = c.genreList[index];
-                            return ListTile(
-                              title: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color:
-                                        c.selectedGenreList.contains(genreIndex)
-                                            ? Colors.cyan
-                                            : Colors.transparent),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Text(
-                                      genreIndex.name ?? "No-Name Genre",
-                                      style: theme.textTheme().labelSmall?.copyWith(inherit: true,
-                                          color: c.selectedGenreList.value.any((element) => element.id == genreIndex.id) ? Colors.white : Colors.cyanAccent)),
-                                ),
-                              ),
-                              onTap: (() {
-                                  c.genreListOnClick(context, genreIndex);
-                                if(Platform.isLinux) {setState(() {});}})
-                            );
-                          }),
+              Expanded(
+                flex: 3,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Obx(
+                        () =>
+                            DropDownMultiSelect(
+                              onChanged: (List<String> x) {
+                                setState(() {
+                                  if (Platform.isLinux) {
+                                    setState(() {});
+                                  }
+                                  c.onFilter(context, x, c.searchText);
+                                });
+                              },
+                              options: c.genreListMultiSelectList,
+                              selectedValues: c.multiSelectSelectedGenreList.value,
+                              whenEmpty: 'Genre Filter',
+                            ),
+                      ),
                     ),
-                  )),
-              Flexible(
+                    Expanded(
+                      flex: 7,
+                      child: TextField(
+                        onChanged: (text) => c.onFilter(context, c.multiSelectSelectedGenreList.value, text),
+                        style: theme.inputFieldStyle(),
+                        decoration: const InputDecoration(
+                          labelText: "Search",
+                          suffixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
                 flex: 9,
                 child: RawScrollbar(
                   thumbColor: Colors.cyanAccent,
@@ -154,56 +157,46 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                           }
                           Media mediaIndex = c.mediaList[index];
                           return Obx(
-                            () => AnimatedContainer(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: c.media?.value.id == mediaIndex.id
-                                      ? Colors.cyan
-                                      : Colors.transparent),
-                              duration: const Duration(milliseconds: 200),
-                              child: ListTile(
-                                title: Text(
-                                  mediaIndex.name ?? "No-Name Music",
-                                  style: theme.textTheme().labelMedium?.copyWith(inherit: true, color: c.media?.value.id == mediaIndex.id
-                                      ? Colors.black
-                                      : Colors.cyan,
-                                  shadows: c.media?.value.id == mediaIndex.id ? [] : theme.shadow()),
-                                ),
-                                leading: CachedNetworkImage(
-                                  imageUrl: mediaIndex
-                                              .mediaImage?.downloadedUrl !=
-                                          null
-                                      ? mediaIndex.mediaImage!.downloadedUrl!
-                                      : mediaIndex.mediaImage?.id != null
-                                          ? getCodenfastMediaUrl(
-                                              mediaIndex.mediaImage?.id)
-                                          : getCodenfastMediaUrl(mediaIndex
-                                              .mediaDownloadSource?.image?.id),
-                                  height: 172.0,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              color: Colors.cyan,
-                                              value: downloadProgress.progress),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                ),
-                                subtitle: Text(
-                                  mediaIndex.attributionText ?? "",
-                                  style: theme.textTheme().bodySmall,
-                                ),
-                                isThreeLine: true,
-                                trailing: null,
-                                //const Icon(Icons.download, color: Colors.white70,),
-                                onTap: (() { c.mediaListOnClick(index);if(Platform.isLinux) {setState(() {});}}),
-                                onLongPress: (() async {
-                                  if (mediaIndex.attributionLink == null) {
-                                    return;
-                                  }
-                                  launchUrl(
-                                      Uri.parse(mediaIndex.attributionLink!));
-                                }),
+                                  () => AnimatedContainer(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: c.media?.value.id == mediaIndex.id
+                                    ? Colors.cyan
+                                    : Colors.transparent),
+                            duration: const Duration(milliseconds: 200),
+                            child: ListTile(
+                              title: Text(
+                                mediaIndex.name ?? "No-Name Music",
+                                style: theme.textTheme().labelMedium?.copyWith(
+                                    inherit: true,
+                                    color: c.media?.value.id == mediaIndex.id
+                                        ? Colors.black
+                                        : Colors.cyan,
+                                    shadows: c.media?.value.id == mediaIndex.id
+                                        ? []
+                                        : theme.shadow()),
                               ),
+                              subtitle: Text(
+                                mediaIndex.attributionText ?? "",
+                                style: theme.textTheme().bodySmall,
+                              ),
+                              isThreeLine: false,
+                              trailing: null,
+                              //const Icon(Icons.download, color: Colors.white70,),
+                              onTap: (() {
+                                c.mediaListOnClick(index);
+                                if (Platform.isLinux) {
+                                  setState(() {});
+                                }
+                              }),
+                              onLongPress: (() async {
+                                if (mediaIndex.attributionLink == null) {
+                                  return;
+                                }
+                                launchUrl(
+                                    Uri.parse(mediaIndex.attributionLink!));
+                              }),
+                            ),
                             ),
                           );
                         }),
@@ -223,7 +216,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
       child: Container(
         decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(width: 2.0, color: Colors.black),
             gradient: const LinearGradient(
                 begin: Alignment.topCenter,
@@ -246,14 +239,9 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             ]),
         child: Column(
           children: [
-            const SizedBox(
-              height: 10,
-            ),
             screen(),
+            volumeSliderScreen(),
             sliderScreen(),
-            const SizedBox(
-              height: 10,
-            ),
             circleButtons()
           ],
         ),
@@ -264,7 +252,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
   Widget screen() {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: Obx(
           () => AnimatedContainer(
             duration: const Duration(seconds: 1),
@@ -307,58 +295,119 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                 },
               ),
               if (c.media != null)
-                Container(
+                AnimatedContainer(
+                  height: 40,
+                  duration: const Duration(seconds: 1),
                   alignment: Alignment.topLeft,
-                  margin: const EdgeInsets.only(left: 5, top: 10),
+                  margin: const EdgeInsets.only(left: 5, top: 5),
+
+                  decoration: BoxDecoration(
+                      color: theme.cyanTransparent.shade100,
+                      borderRadius: BorderRadius.circular(10)),
                   child: Obx(
-                    () => Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          turkishToEnglishLetters(c.media!.value.name ?? "No-Name Music"),
-                          style: theme.textTheme().labelLarge?.copyWith(inherit: true, color: Colors.cyanAccent)
-                        ),
-                        if (c.media != null && c.media!.value.attributionText != null)
-                          Expanded(
-                          child: Obx(() => Text(c.media!.value.attributionText!,
-                              style: theme.textTheme().bodySmall)),
-                        )
-                      ],
+                    () => AnimatedTextKit(
+                    onTap: () {
+                    if (c.media != null &&
+                        c.media!.value.attributionLink != null) {
+                      launchUrl(
+                          Uri.parse(c.media!.value.attributionLink!));
+                    }
+                    },
+                    repeatForever: true,
+                    animatedTexts: [
+                    RotateAnimatedText(
+                        turkishToEnglishLetters(
+                            c.media!.value.name ?? "No-Name Music"),
+                        duration: const Duration(seconds: 4),
+                        textStyle: theme.textTheme().labelLarge?.copyWith(
+                            inherit: true, color: Colors.cyanAccent)),
+                    if (c.media != null &&
+                        c.media!.value.attributionText != null)
+                      RotateAnimatedText(c.media!.value.attributionText!,
+                          duration: const Duration(seconds: 2),
+                          textStyle: theme.textTheme().bodySmall),
+                    if (c.media != null &&
+                        c.media!.value.attributionLink != null)
+                      RotateAnimatedText(c.media!.value.attributionLink!,
+                          duration: const Duration(seconds: 2),
+                          textStyle: theme
+                              .textTheme()
+                              .bodySmall
+                              ?.copyWith(
+                                  inherit: true,
+                                  color: Colors.cyanAccent)),
+                    ],
                     ),
                   ),
                 ),
-              // if (c.media != null && c.media!.value.attributionText != null)
-              //   Container(
-              //       alignment: Alignment.topLeft,
-              //       margin: const EdgeInsets.only(left: 5, top: 60),
-              //       child: Obx(() => Text(c.media!.value.attributionText!,
-              //           style: theme.textTheme().bodySmall))),
-              if (c.media != null && c.media!.value.attributionLink != null)
-                Container(
-                    alignment: Alignment.bottomLeft,
-                    margin: const EdgeInsets.only(left: 5, bottom: 20),
-                    child: InkWell(
-                      onTap: () {
-                        launchUrl(Uri.parse(c.media!.value.attributionLink!));
-                      },
-                      child: Obx(() => Text(c.media!.value.attributionLink!,
-                          style: theme.textTheme().bodySmall?.copyWith(inherit: true, color: Colors.cyanAccent))),
-                    )),
-              if (c.media != null)
-                Container(
-                  alignment: Alignment.bottomRight,
-                  margin: const EdgeInsets.all(5),
-                  child: Obx(
-                    () => Text(
-                      "${c.position.toString().split('.').first.padLeft(8, "0")}/${c.duration.toString().split('.').first.padLeft(8, "0")}",
-    style: theme.textTheme().bodyMedium?.copyWith(inherit: true, color: Colors.cyanAccent)),
-                    ),
-                  ),
             ]),
           ),
         ),
       ),
+    );
+  }
+
+  Widget volumeSliderScreen() {
+    return Container(
+      height: 30,
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10)),
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black,
+                Colors.black38,
+              ]),
+          boxShadow: [
+            BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 1),
+                offset: Offset(0, -2),
+                blurRadius: 3,
+                spreadRadius: 1),
+            BoxShadow(
+                color: Color.fromRGBO(200, 200, 200, 0.2),
+                offset: Offset(0, 2),
+                blurRadius: 3,
+                spreadRadius: 1),
+          ]),
+      child: Obx(() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: SizedBox(
+              width: 70,
+              child: Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(c.audioPlayerVolume.value > 0.7 ? Icons.volume_up : c.audioPlayerVolume.value != 0 ? Icons.volume_down: Icons.volume_off, color: Colors.white),
+                        Text(
+                        "${(c.audioPlayerVolume.value * 100).toInt()}",
+                        style: theme.textTheme().bodyMedium?.copyWith(
+                            inherit: true, color: Colors.cyanAccent)),
+                      ],
+                    ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Slider(
+                      activeColor: Colors.yellow,
+                      inactiveColor: Colors.grey,
+                      value: c.audioPlayerVolume.value,
+                      min: 0,
+                      max: 1,
+                      onChanged: (double value) {c.audioPlayer.value.setVolume(value);c.audioPlayerVolume.value = value;}),
+          ),
+        ],
+      )
+      )
     );
   }
 
@@ -389,17 +438,35 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
                 spreadRadius: 1),
           ]),
       child: Obx(
-        () => slider(),
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: SizedBox(
+                width: 70,
+                child: Obx(
+                      () => Text(
+                      "${c.position.toString().split('.').first.padLeft(8, "0")}/ ${c.duration.toString().split('.').first.padLeft(8, "0")}",
+                      style: theme.textTheme().bodyMedium?.copyWith(
+                          inherit: true, color: Colors.cyanAccent)),
+                ),
+              ),
+            ),
+            Expanded(child: slider()),
+          ],
+        ),
       ),
     );
   }
 
   Widget circleButtons() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
                 width: 2.0, color: Colors.black, style: BorderStyle.solid),
             gradient: const LinearGradient(
@@ -427,7 +494,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Container(
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -457,7 +524,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Obx(
                   () => AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -498,7 +565,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Obx(
                   () => AnimatedContainer(
                     decoration: BoxDecoration(
@@ -541,7 +608,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Obx(
                   () => AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -581,7 +648,7 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Container(
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -617,8 +684,13 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget startButton() {
     return IconButton(
-      onPressed: () {c.startButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
-      iconSize: 30,
+      onPressed: () {
+        c.startButtonOnClick();
+        if (Platform.isLinux) {
+          setState(() {});
+        }
+      },
+      iconSize: 25,
       icon: AnimatedIcon(
         icon: AnimatedIcons.play_pause,
         progress: c.startButtonAnimationController,
@@ -631,8 +703,13 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget previousButton() {
     return IconButton(
-        iconSize: 30,
-        onPressed: (){ c.previousButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
+        iconSize: 25,
+        onPressed: () {
+          c.previousButtonOnClick();
+          if (Platform.isLinux) {
+            setState(() {});
+          }
+        },
         icon: const Icon(
           Icons.fast_rewind,
           color: Colors.grey,
@@ -641,10 +718,12 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget nextButton() {
     return IconButton(
-      iconSize: 30,
+      iconSize: 25,
       onPressed: () {
         c.nextMedia();
-        if(Platform.isLinux) {setState(() {});}
+        if (Platform.isLinux) {
+          setState(() {});
+        }
       },
       icon: const Icon(
         Icons.fast_forward,
@@ -655,8 +734,13 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget loopButton() {
     return IconButton(
-      iconSize: 30,
-      onPressed: () { c.loopButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
+      iconSize: 25,
+      onPressed: () {
+        c.loopButtonOnClick();
+        if (Platform.isLinux) {
+          setState(() {});
+        }
+      },
       icon: Icon(
         Icons.loop,
         color: c.isLoop.isTrue ? Colors.cyan : Colors.grey,
@@ -674,20 +758,25 @@ class _AudioPlaylistManagerState extends State<AudioPlaylistManager>
 
   Widget stopButton() {
     return IconButton(
-      iconSize: 30,
-      onPressed: () {c.stopButtonOnClick(); if(Platform.isLinux) {setState(() {});}},
+      iconSize: 25,
+      onPressed: () {
+        c.stopButtonOnClick();
+        if (Platform.isLinux) {
+          setState(() {});
+        }
+      },
       icon: Obx(() => Icon(Icons.stop,
-          color: c.audioPlayer.value.state == PlayerState.stopped
-              ? Colors.cyan
-              : Colors.grey,
-          shadows: [
-            if (c.audioPlayer.value.state == PlayerState.stopped)
-              const BoxShadow(
-                  color: Colors.cyan,
-                  offset: Offset(0, 0),
-                  blurRadius: 5,
-                  spreadRadius: 12),
-          ])),
+              color: c.audioPlayer.value.state == PlayerState.stopped
+                  ? Colors.cyan
+                  : Colors.grey,
+              shadows: [
+                if (c.audioPlayer.value.state == PlayerState.stopped)
+                  const BoxShadow(
+                      color: Colors.cyan,
+                      offset: Offset(0, 0),
+                      blurRadius: 5,
+                      spreadRadius: 12),
+              ])),
     );
   }
 

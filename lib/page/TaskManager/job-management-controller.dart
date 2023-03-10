@@ -52,8 +52,37 @@ class JobManagementController extends GetxController {
     basejob.isStarted.value = true;
     basejob.statusMessage.value = "Started";
     basejob.statusMessage.refresh();
-    RequestGrid requestGrid =
-    mediaGenreServiceGridRequest(0, null, pageSize: 10000000);
+    RequestGrid requestGrid = RequestGrid(
+        page: 0,
+        pageSize: 1000000,
+        sortField: null,
+        sortOrder: null,
+        propertyList: [
+          "id",
+          "genre.id",
+          "genre.name",
+          "media.id",
+          "media.artist",
+          "media.name",
+          "media.mediaImage.id",
+          "media.mediaImage.downloadedUrl",
+          "media.attributionText",
+          "media.attributionLink",
+          "media.downloadedUrl",
+          "media.mediaDownloadSource.id",
+          "media.mediaDownloadSource.siteName",
+          "media.mediaDownloadSource.title",
+          "media.mediaDownloadSource.url",
+          "media.mediaDownloadSource.image.id",
+          "media.mediaDownloadSource.image.downloadedUrl"
+        ],
+        filters: [
+          FilterParam("passive", "equal", [false]),
+          FilterParam("genre.passive", "equal", [false]),
+          FilterParam("media.passive", "equal", [false]),
+          FilterParam("media.mimeType", "equal", ["audio/mpeg"]),
+          FilterParam("media.status.name", "equal", ["DONE"]),
+        ]);
     await mediaGenreServiceGridCall(context, requestGrid)
         .then((value) async {
 

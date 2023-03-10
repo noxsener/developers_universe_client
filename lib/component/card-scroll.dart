@@ -45,7 +45,7 @@ class CardScrollWidget extends StatelessWidget {
               start: start,
               textDirection: TextDirection.rtl,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(10.0),
                 child: Container(
                   decoration: const BoxDecoration(color: Colors.white, boxShadow: [
                     BoxShadow(color: Colors.black12,

@@ -182,15 +182,15 @@ showAlertDialog(BuildContext context, Widget title, Widget content, List<TextBut
 
 String getFileSize(int fileSize) {
   if(fileSize >= 1024 && fileSize < 1048576) {
-    return (fileSize / 1024).ceil().toStringAsFixed(3)+" KB";
+    return "${(fileSize / 1024).ceil().toStringAsFixed(3)} KB";
   } else if(fileSize >= 1048576 && fileSize < 1073741824) {
     // String kb =  ((fileSize % 1048576) / 1024).ceil().toString();
-    return (fileSize / 1048576).toStringAsFixed(3).toString()+" MB";
+    return "${(fileSize / 1048576).toStringAsFixed(3)} MB";
   } else if(fileSize >= 1073741824) {
     // String mb =  ((fileSize % 1073741824) / 1048576).ceil().toString();
-    return (fileSize / 1073741824).toStringAsFixed(3)+" GB";
+    return "${(fileSize / 1073741824).toStringAsFixed(3)} GB";
   }
-  return fileSize.toStringAsFixed(3)+" byte";
+  return "${fileSize.toStringAsFixed(3)} byte";
 }
 
 String? textToUrl(String? text) {
@@ -229,8 +229,8 @@ String fallbackNetworkImage(String? image) {
   return imageRegex.hasMatch(image) ? image : "https://app.codenfast.com:8443/api/rest/server-files/system/image/codenfast.com/012021/logo.webp";
 }
 
-String iconFromFileExtension(String fileName) {
-  if(!fileName.contains(".")) {
+String iconFromFileExtension(String? fileName) {
+  if(fileName == null || !fileName.contains(".")) {
     return "assets/ikonlar/files/applicationoctetstream.png";
   }
   String extension = fileName.substring(fileName.indexOf(".")+1);

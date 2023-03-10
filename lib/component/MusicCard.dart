@@ -26,7 +26,7 @@ class MusicCard extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 5),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
               fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(

@@ -18,45 +18,6 @@ String getCodenfastMediaUrl(String? id) {
   return "http://192.168.1.254:10007/media/$id";
 }
 
-RequestGrid mediaGenreServiceGridRequest(int? page, List<Genre>? genreList, {int pageSize = 20, String? sortField, int? sortOrder}) {
-  RequestGrid requestGrid = RequestGrid(
-      page: (page ?? 0) * 20,
-      pageSize: (((page ?? 0) + 1) * pageSize) - 1,
-      sortField: null,
-      sortOrder: null,
-      propertyList: [
-        "id",
-        "genre.id",
-        "genre.name",
-        "media.id",
-        "media.artist",
-        "media.name",
-        "media.mediaImage.id",
-        "media.mediaImage.downloadedUrl",
-        "media.attributionText",
-        "media.attributionLink",
-        "media.downloadedUrl",
-        "media.mediaDownloadSource.id",
-        "media.mediaDownloadSource.siteName",
-        "media.mediaDownloadSource.title",
-        "media.mediaDownloadSource.url",
-        "media.mediaDownloadSource.image.id",
-        "media.mediaDownloadSource.image.downloadedUrl"
-      ],
-      filters: [
-        FilterParam("passive", "equal", [false]),
-        FilterParam("genre.passive", "equal", [false]),
-        FilterParam("media.passive", "equal", [false]),
-        FilterParam("media.mimeType", "equal", ["audio/mpeg"]),
-        FilterParam("media.status.name", "equal", ["DONE"]),
-      ]);
-  if (genreList != null && genreList.isNotEmpty) {
-    requestGrid.filters!.add(FilterParam(
-        "genre.id", "in", genreList.map((e) => e.id).toList(growable: false)));
-  }
-  return requestGrid;
-}
-
 Future<List<MediaGenre>> mediaGenreServiceGridCall(
     BuildContext context, RequestGrid requestGrid) async {
   HClient hclient = HClient();

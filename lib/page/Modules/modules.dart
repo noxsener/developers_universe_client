@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:developersuniverse_client/page/Modules/UserLogin/user-profile.dart';
+import 'package:developersuniverse_client/page/Modules/EArchive/electronic-archive.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../models/common-model.dart';
+import 'UserProfile/user-profile.dart';
 import 'modules-controller.dart';
 
 class Modules extends StatefulWidget {
@@ -57,14 +58,23 @@ class _ModulesState extends State<Modules>
             });
           }),
       CodenfastMenu(
-          title: "Digital Archive",
+          title: "Electronic Archive",
           icon: const Icon(
             FontAwesomeIcons.paperclip,
             color: Colors.white,
           ),
           description: "Store and retrieve your bla bla bla papers....",
           image:
-              "https://c.pxhere.com/photos/7b/35/library_books_shelving_shelves_reading_culture_corridor_classic-863788.jpg!d"),
+              "https://c.pxhere.com/photos/7b/35/library_books_shelving_shelves_reading_culture_corridor_classic-863788.jpg!d",
+          onClick: () {
+            setState(() {
+              c.title.value= 'Electronic Archive';
+              c.electronicArchive ??= const ElectronicArchivePage();
+              c.activeWidget!.value = c.electronicArchive;
+              c.title.refresh();
+              c.activeWidget!.refresh();
+            });
+          }),
       CodenfastMenu(
           title: "Coffee Break",
           icon: const Icon(
@@ -85,8 +95,8 @@ class _ModulesState extends State<Modules>
               "https://c.pxhere.com/photos/d6/1f/wrench_spanner_repair_fix_toolbox_service_work_tool-1328937.jpg!d",
           onClick: () {
             setState(() {
-              c.title.value= 'Digital Archive';
-              c.digitalArchive ??= c.settingsMenu(context);
+              c.title.value= 'Settings';
+              c.settingMenu ??= c.settingsMenu(context);
               c.activeWidget!.value = c.settingMenu;
               c.title.refresh();
               c.activeWidget!.refresh();
@@ -101,12 +111,11 @@ class _ModulesState extends State<Modules>
         // c.activeWidget = c.settingsMenu(context);
       });
     }
-
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
       return Column(
         children: [
-          if(c.activeWidget!.value! != c.moduleMenu) Padding(
+          if(c.activeWidget!.value!.key != c.moduleMenu!.key) Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               height: 62,
@@ -118,7 +127,11 @@ class _ModulesState extends State<Modules>
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    IconButton(onPressed: () {c.activeWidget!.value = c.moduleMenu;}, icon: const Icon(FontAwesomeIcons.chevronLeft, color: Colors.white,)),
+                    IconButton(onPressed: () {
+                      setState(() {
+                        c.activeWidget!.value = c.moduleMenu;
+                      });
+                      }, icon: const Icon(FontAwesomeIcons.chevronLeft, color: Colors.white,)),
                     Text(c.title.value),
                   ],
                 ),

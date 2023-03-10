@@ -66,6 +66,10 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   carousel_slider: ^4.2.1
+  google_mobile_ads: ^2.3.0
+  multiselect: ^0.0.7
+  googleapis: ^10.0.0
+  google_sign_in: ^5.4.4
 
 
 dev_dependencies:

@@ -18,7 +18,7 @@ class ModulesController extends GetxController {
   static Widget? userProfile;
   Widget? settingMenu;
   Widget? moduleMenu;
-  Widget? digitalArchive;
+  Widget? electronicArchive;
 
   initState(BuildContext context, TickerProvider ticketProvider) async {
   }
