@@ -70,6 +70,8 @@
 
 Developers and other IT employees having most time with stresfully days. So this projects is just trying entertain (so also us) and make more funny times with working time or in a plenty time.
 
+### <a href="#licence">Please check Licence before fork</a>
+
 Here's why:
 * Your time should be focused on creating or keep it working something amazing. This project is nothing solves anything for you directly, it try to makes you feel better.
 * You can listen music while in worktime.
@@ -156,11 +158,13 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
+<br id="licence">
+
 ## License
 
 Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). See `LICENSE.txt` for more information.
 <br>
-If you don't want to read long text; it's simply [telling you what you can do or not at here](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+If you don't want to read long text; it's simply [telling you what you can do or not, at here](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
