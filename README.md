@@ -96,7 +96,7 @@ To get a local copy up and running follow these simple example steps.
 * Git [from here] (https://git-scm.com/downloads)
 * Dart SDK [from here](https://dart.dev/get-dart)
 * Flutter [from here](https://docs.flutter.dev/get-started/install)
-* Recenty Updated **[Android Studio](https://developer.android.com/studio)** or **(Visual Studio Code)[https://code.visualstudio.com/download]** with Dart-Flutter plugins.
+* Recenty Updated **[Android Studio](https://developer.android.com/studio)** or **[Visual Studio Code](https://code.visualstudio.com/download)** with Dart-Flutter plugins.
 
 ### Installation
 
