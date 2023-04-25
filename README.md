@@ -167,7 +167,7 @@ If you don't want to read long text; it's simply [telling you what you can do or
 <!-- CONTACT -->
 ## Contact
 
-[Please join our discord server first](https://discord.gg/d3F8ggDs)
+[Please join our discord server](https://discord.gg/d3F8ggDs)
 
 Project Link: [https://github.com/noxsener/developers_universe_client](https://github.com/noxsener/developers_universe_client)
 
