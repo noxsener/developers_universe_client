@@ -9,7 +9,7 @@
 
 
 <!-- PROJECT LOGO -->
-<br />
+<br id="readme-top" />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="https://flykobi.codenfast.com/assets/ikonlar/logo.webp" alt="Logo" width="144" height="144">
@@ -52,12 +52,10 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
