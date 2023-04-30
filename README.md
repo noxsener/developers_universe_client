@@ -11,8 +11,8 @@
 <!-- PROJECT LOGO -->
 <br id="readme-top" />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://flykobi.codenfast.com/assets/ikonlar/logo.webp" alt="Logo" width="144" height="144">
+  <a href="https://codenfast.com">
+    <img src="https://app.codenfast.com:8443/api/rest/server-files/system/image/codenfast.com/012021/DevelopersUniverse-logo.png" alt="Logo" width="144" height="144">
   </a>
 
   <h3 align="center">Codenfast / Developers Universe</h3>
@@ -162,7 +162,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
-Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). See `LICENSE.txt` for more information.
+Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). See <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"> licence description for more information. </a>
 <br>
 If you don't want to read long text; it's simply [telling you what you can do or not, at here](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
