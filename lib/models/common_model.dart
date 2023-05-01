@@ -5,13 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
 
-import '../services/common-service.dart';
-part 'common-model.g.dart';
+import '../services/common_service.dart';
+part 'common_model.g.dart';
 // flutter packages pub run build_runner build
 
 
 void registerHiveAdapters() {
-  // in common-model.g.dart, use regex "[ ][a-zA-Z0-9]*Adapter "
+  // in common_model.g.dart, use regex "[ ][a-zA-Z0-9]*Adapter "
   Hive.registerAdapter(MediaAdapter());
   Hive.registerAdapter(MediaDownloadSourceAdapter());
   Hive.registerAdapter(MediaFolderAdapter());
@@ -203,7 +203,7 @@ class ErrorObject implements JsonConvertable {
 
   ErrorObject.fromJSON(Map<String, dynamic> json) {
     if(json['timestamp'] != null) {
-      timestamp = DateTime.parse(json['timestamp']);
+      timestamp = parseLocalDateTime(json['timestamp']);
     }
     if(json['status'] != null) {
       status = json['status'];
@@ -311,7 +311,7 @@ class User implements JsonConvertable {
       email = json['email'];
     }
     if(json['lastTokenTime'] != null) {
-      lastTokenTime = DateTime.parse(json['lastTokenTime']);
+      lastTokenTime = parseLocalDateTime(json['lastTokenTime']);
     }
     if(json['lastTokenTime'] != null) {
       userAuthorizationList =
@@ -423,7 +423,7 @@ class UserRole implements JsonConvertable {
   UserRole({this.createTime, this.id, this.name, this.passive, this.roleList, this.updateTime, this.user, });
 
   UserRole.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -434,7 +434,7 @@ class UserRole implements JsonConvertable {
       passive = json['passive'];
     }
     roleList = json['roleList'] != null ? json['roleList'].map<Role>((i) => Role.fromJSON(i)).toList() : [];
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     user = json['user'] != null ? User.fromJSON(json['user']) : null;
   }
 
@@ -480,7 +480,7 @@ class UserAuthorization implements JsonConvertable {
 
   UserAuthorization.fromJSON(Map<String, dynamic> json) {
     authorization = json['authorization'] != null ? Authorization.fromJSON(json['authorization']) : null;
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['grant'] != null) {
       grant = json['grant'];
     }
@@ -490,7 +490,7 @@ class UserAuthorization implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     user = json['user'] != null ? User.fromJSON(json['user']) : null;
   }
 
@@ -536,7 +536,7 @@ class Authorization implements JsonConvertable {
   Authorization({this.createTime, this.grant, this.id, this.name, this.passive, this.roleAuthorizationList, this.updateTime, this.userAuthorizationList, });
 
   Authorization.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['grant'] != null) {
       grant = json['grant'];
     }
@@ -550,7 +550,7 @@ class Authorization implements JsonConvertable {
       passive = json['passive'];
     }
     roleAuthorizationList = json['roleAuthorizationList'] != null ? json['roleAuthorizationList'].map<RoleAuthorization>((i) => RoleAuthorization.fromJSON(i)).toList() : [];
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     userAuthorizationList = json['userAuthorizationList'] != null ? json['userAuthorizationList'].map<UserAuthorization>((i) => UserAuthorization.fromJSON(i)).toList() : [];
   }
 
@@ -598,7 +598,7 @@ class RoleAuthorization implements JsonConvertable {
 
   RoleAuthorization.fromJSON(Map<String, dynamic> json) {
     authorization = json['authorization'] != null ? Authorization.fromJSON(json['authorization']) : null;
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['grant'] != null) {
       grant = json['grant'];
     }
@@ -609,7 +609,7 @@ class RoleAuthorization implements JsonConvertable {
       passive = json['passive'];
     }
     role = json['role'] != null ? Role.fromJSON(json['role']) : null;
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -651,7 +651,7 @@ class Role implements JsonConvertable {
   Role({this.createTime, this.id, this.name, this.passive, this.roleAuthorizationList, this.updateTime, });
 
   Role.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -662,7 +662,7 @@ class Role implements JsonConvertable {
       passive = json['passive'];
     }
     roleAuthorizationList = json['roleAuthorizationList'] != null ? json['roleAuthorizationList'].map<RoleAuthorization>((i) => RoleAuthorization.fromJSON(i)).toList() : [];
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -750,6 +750,7 @@ class CodenfastMenu {
           Expanded(
             flex: 8,
             child: Container(
+              height: 360,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(10),
@@ -868,6 +869,8 @@ class Media extends HiveObject implements JsonConvertable {
   int? width;
   @HiveField(27)
   String? zipMimeType;
+  @HiveField(28)
+  int? lengthInSeconds;
 
   Media({this.artist, this.attributionLink, this.attributionSourceLink, this.attributionText, this.createTime, this.description, this.downloadIntent, this.downloadPartList, this.downloadedUrl, this.fileLocation, this.fileName, this.height, this.id, this.imageOfMediaList, this.isPublic, this.mediaDownloadSource, this.mediaImage, this.mediaSize, this.mimeType, this.multipartFile, this.name, this.partialDownloadSupport, this.passive, this.size, this.status, this.updateTime, this.width, this.zipMimeType, });
 
@@ -884,7 +887,7 @@ class Media extends HiveObject implements JsonConvertable {
     if (json['attributionText'] != null) {
       attributionText = json['attributionText'];
     }
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['description'] != null) {
       description = json['description'];
     }
@@ -931,9 +934,12 @@ class Media extends HiveObject implements JsonConvertable {
       size = json['size'];
     }
     status = json['status'] != null ? DownloadStatus.fromJSON(json['status']) : null;
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     if (json['width'] != null) {
       width = json['width'];
+    }
+    if (json['lengthInSeconds'] != null) {
+      lengthInSeconds = json['lengthInSeconds'];
     }
     if (json['zipMimeType'] != null) {
       zipMimeType = json['zipMimeType'];
@@ -1023,6 +1029,9 @@ class Media extends HiveObject implements JsonConvertable {
   if (width != null) {
     data['width'] = width;
   }
+  if (lengthInSeconds != null) {
+    data['lengthInSeconds'] = lengthInSeconds;
+  }
   if (zipMimeType != null) {
     data['zipMimeType'] = zipMimeType;
   }
@@ -1059,7 +1068,7 @@ class MediaDownloadSource extends HiveObject implements JsonConvertable {
   MediaDownloadSource({this.createTime, this.description, this.id, this.image, this.name, this.passive, this.siteName, this.title, this.type, this.updateTime, this.url, });
 
   MediaDownloadSource.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['description'] != null) {
       description = json['description'];
     }
@@ -1084,7 +1093,7 @@ class MediaDownloadSource extends HiveObject implements JsonConvertable {
     if (json['type'] != null) {
       type = json['type'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     if (json['url'] != null) {
       url = json['url'];
     }
@@ -1148,7 +1157,7 @@ class MediaFolder extends HiveObject implements JsonConvertable {
   MediaFolder({this.createTime, this.description, this.id, this.name, this.passive, this.updateTime, });
 
   MediaFolder.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['description'] != null) {
       description = json['description'];
     }
@@ -1161,7 +1170,7 @@ class MediaFolder extends HiveObject implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1205,7 +1214,7 @@ class DownloadIntent extends HiveObject implements JsonConvertable {
   DownloadIntent({this.createTime, this.id, this.name, this.passive, this.updateTime, });
 
   DownloadIntent.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -1215,7 +1224,7 @@ class DownloadIntent extends HiveObject implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1272,7 +1281,7 @@ class DownloadPart implements JsonConvertable {
     if (json['byteRangeStart'] != null) {
       byteRangeStart = json['byteRangeStart'];
     }
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -1287,7 +1296,7 @@ class DownloadPart implements JsonConvertable {
       passive = json['passive'];
     }
     status = json['status'] != null ? DownloadStatus.fromJSON(json['status']) : null;
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1343,7 +1352,7 @@ class DownloadStatus implements JsonConvertable {
   DownloadStatus({this.createTime, this.id, this.name, this.passive, this.updateTime, });
 
   DownloadStatus.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -1353,7 +1362,7 @@ class DownloadStatus implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1394,7 +1403,7 @@ class Genre implements JsonConvertable {
   Genre({this.createTime, this.id, this.name, this.passive, this.updateTime, });
 
   Genre.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -1404,7 +1413,7 @@ class Genre implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1447,7 +1456,7 @@ class MediaGenre extends HiveObject implements JsonConvertable {
   MediaGenre({this.createTime, this.id, this.media, this.genre, this.passive, this.updateTime, });
 
   MediaGenre.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -1456,7 +1465,7 @@ class MediaGenre extends HiveObject implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1524,7 +1533,7 @@ class ElectronicArchive implements JsonConvertable {
   ElectronicArchive({this.createTime, this.description, this.electronicArchiveFolder, this.electronicArchiveList, this.fileBase64, this.fileLocation, this.fileName, this.height, this.id, this.isFolder, this.mimeType, this.name, this.passive, this.size, this.updateTime, this.width, this.zipMimeType, });
 
   ElectronicArchive.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['description'] != null) {
       description = json['description'];
     }
@@ -1560,7 +1569,7 @@ class ElectronicArchive implements JsonConvertable {
     if (json['size'] != null) {
       size = json['size'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     if (json['width'] != null) {
       width = json['width'];
     }
@@ -1649,7 +1658,7 @@ class ElectronicArchiveProperty implements JsonConvertable {
   ElectronicArchiveProperty({this.createTime, this.description, this.id, this.name, this.passive, this.updateTime, this.valueType, });
 
   ElectronicArchiveProperty.fromJSON(Map<String, dynamic> json) {
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
     if (json['description'] != null) {
       description = json['description'];
     }
@@ -1662,7 +1671,7 @@ class ElectronicArchiveProperty implements JsonConvertable {
     if (json['passive'] != null) {
       passive = json['passive'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
     if (json['valueType'] != null) {
       valueType = json['valueType'];
     }
@@ -1724,8 +1733,8 @@ class ElectronicArchivePropertyValue implements JsonConvertable {
     if (json['booleanValue'] != null) {
       booleanValue = json['booleanValue'];
     }
-    createTime = json['createTime'] != null ? DateTime.parse(json['createTime']) : null;
-    dateValue = json['dateValue'] != null ? DateTime.parse(json['dateValue']) : null;
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
+    dateValue = json['dateValue'] != null ? parseLocalDateTime(json['dateValue']) : null;
     electronicArchiveProperty = json['electronicArchiveProperty'] != null ? ElectronicArchiveProperty.fromJSON(json['electronicArchiveProperty']) : null;
     if (json['id'] != null) {
       id = json['id'];
@@ -1739,7 +1748,7 @@ class ElectronicArchivePropertyValue implements JsonConvertable {
     if (json['stringValue'] != null) {
       stringValue = json['stringValue'];
     }
-    updateTime = json['updateTime'] != null ? DateTime.parse(json['updateTime']) : null;
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
   }
 
   @override
@@ -1778,6 +1787,59 @@ class ElectronicArchivePropertyValue implements JsonConvertable {
 }
 
 
+@HiveType(typeId: 11)
+class OfflineDbInfo implements JsonConvertable {
+  @HiveField(0)
+  String? id;
+  @HiveField(1)
+  bool? passive;
+  @HiveField(2)
+  DateTime? createTime;
+  @HiveField(3)
+  DateTime? updateTime;
+  @HiveField(4)
+  String? name;
+
+
+  OfflineDbInfo({this.id, this.passive, this.createTime, this.updateTime,
+      this.name});
+
+  OfflineDbInfo.fromJSON(Map<String, dynamic> json) {
+    createTime = json['createTime'] != null ? parseLocalDateTime(json['createTime']) : null;
+    if (json['id'] != null) {
+      id = json['id'];
+    }
+    if (json['passive'] != null) {
+      passive = json['passive'];
+    }
+    updateTime = json['updateTime'] != null ? parseLocalDateTime(json['updateTime']) : null;
+    if (json['name'] != null) {
+      name = json['name'];
+    }
+  }
+
+  @override
+  toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (createTime != null) {
+      data['createTime'] = createTime!.toIso8601String;
+    }
+    if (id != null) {
+      data['id'] = id;
+    }
+    if (passive != null) {
+      data['passive'] = passive;
+    }
+    if (updateTime != null) {
+      data['updateTime'] = updateTime!.toIso8601String;
+    }
+    if (name != null) {
+      data['name'] = name;
+    }
+    return data;
+  }
+
+}
 
 
 

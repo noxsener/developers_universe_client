@@ -9,7 +9,7 @@ import audioplayers_darwin
 import bitsdojo_window_macos
 import connectivity_plus
 import flutter_local_notifications
-import path_provider_macos
+import path_provider_foundation
 import shared_preferences_foundation
 import sqflite
 import url_launcher_macos

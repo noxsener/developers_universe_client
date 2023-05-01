@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:developersuniverse_client/models/common-model.dart';
-import 'package:developersuniverse_client/page/Modules/UserProfile/user-profile-controller.dart';
+import 'package:developersuniverse_client/models/common_model.dart';
+import 'package:developersuniverse_client/page/Modules/UserProfile/user_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../services/common-service.dart';
-import '../../../services/translate-pipe.dart';
-import '../../../webservices/user-service.dart';
+import '../../../services/common_service.dart';
+import '../../../services/translate_pipe.dart';
+import '../../../webservices/user_service.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);

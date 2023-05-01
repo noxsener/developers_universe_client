@@ -1,18 +1,20 @@
 library commonService;
 
 import "dart:convert";
+import "dart:math";
 
 import 'package:developersuniverse_client/services/theme.dart';
-import 'package:developersuniverse_client/services/translate-pipe.dart';
+import 'package:developersuniverse_client/services/translate_pipe.dart';
 import "package:flutter/material.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart";
 import "package:http/http.dart";
 import "package:intl/intl.dart";
 import "package:url_launcher/url_launcher.dart";
 
 import "dart:convert" show utf8;
 
-import '../models/common-model.dart';
+import '../models/common_model.dart';
 
 bool appCanCall = false;
 bool appCanSms = false;
@@ -85,6 +87,21 @@ DateTime get now {
   return time != null ? time!.toUtc() :  DateTime.now().toUtc();
 }
 
+DateTime parseLocalDateTime(dynamic value) {
+  if (value.length >= 6) {
+    // LocalDateTime
+    return DateTime(
+      value[0],
+      value[1],
+      value[2],
+      value[3],
+      value[4],
+      value[5]
+    );
+  }
+  return DateTime.parse(value);
+}
+
 class CodenfastPageRoute extends MaterialPageRoute {
   CodenfastPageRoute({required WidgetBuilder builder}) : super(builder: builder);
 
@@ -117,6 +134,46 @@ showSnackBar(BuildContext context, String text) {
     behavior: SnackBarBehavior.floating,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+
+T myMethod<T>(T param) {
+  return param;
+}
+
+void showSelectionDialog<T>(BuildContext context, String title,Widget optionsWidget, {String? description, List<TextButton>? actionButtons}) {
+  Size size = MediaQuery.of(context).size;
+  showDialog
+    (
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text(title, style: theme.textTheme().headlineLarge,),
+            content:  Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if(description != null) Text(description, style: theme.textTheme().bodyMedium),
+                SizedBox(
+                    width: size.width * (size.width < 800
+                        ? 0.95
+                        : size.width < 1000
+                        ? 0.8
+                        : 0.5),
+                    height: size.height * 0.35,
+                    child: optionsWidget
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              if(actionButtons != null) ...actionButtons
+            ],
+          );
+        },
+      );
+    },
+  );
 }
 
 errorHandler(BuildContext context, Response response) {

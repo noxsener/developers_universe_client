@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:developersuniverse_client/models/common-model.dart';
+import 'package:developersuniverse_client/models/common_model.dart';
 import 'package:developersuniverse_client/page/Modules/modules.dart';
-import 'package:developersuniverse_client/page/TaskManager/job-management.dart';
-import 'package:developersuniverse_client/services/admob-service.dart';
-import 'package:developersuniverse_client/services/common-service.dart';
-import 'package:developersuniverse_client/services/jobService.dart';
+import 'package:developersuniverse_client/page/TaskManager/job_management.dart';
+import 'package:developersuniverse_client/page/Updater/updater.dart';
+import 'package:developersuniverse_client/services/admob_service.dart';
+import 'package:developersuniverse_client/services/common_service.dart';
+import 'package:developersuniverse_client/services/job_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import 'page/AudioPlaylistManager/audio-playlist-manager.dart';
+import 'page/AudioPlaylistManager/audio_playlist_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +31,7 @@ void main() async {
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     doWhenWindowReady(() {
       final win = appWindow;
-      const initialSize = Size(800, 600);
+      const initialSize = Size(1280, 720);
       win.minSize = const Size(500,600);
       win.size = initialSize;
       win.alignment = Alignment.center;
@@ -40,6 +41,8 @@ void main() async {
   }
   initTimerTasks();
   MyApp appInstance = const MyApp();
+  await Hive.openBox<OfflineDbInfo>("offlineDbInfo").then((offlineDbInfo) => MyApp.offlineDbInfo = offlineDbInfo);
+  await Hive.openBox<Media>("MediaFileIndexBox").then((mediaFileIndexBox) => MyApp.mediaFileIndexBox = mediaFileIndexBox);
   await Hive.openBox<MediaGenre>("MediaGenre").then((mediaGenreBox) => MyApp.mediaGenreBox = mediaGenreBox);
   await Hive.openBox<Genre>("Genre").then((genreBox) => MyApp.genreBox = genreBox);
   await Hive.openBox<Media>("Media").then((mediaBox) => MyApp.mediaBox = mediaBox);
@@ -56,6 +59,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static late Box<OfflineDbInfo> offlineDbInfo;
+  static late Box<Media> mediaFileIndexBox;
   static late Box<Genre> genreBox;
   static late Box<Media> mediaBox;
   static late Box<MediaGenre> mediaGenreBox;
@@ -82,12 +87,12 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.black),
             dialogTheme: DialogTheme(
               contentTextStyle: theme.textTheme().bodySmall,
-              backgroundColor: theme.cyanTransparent[500],
+              backgroundColor: theme.blackTransparent[1400],
               iconColor: Colors.white,
               titleTextStyle: theme.textTheme().titleSmall,
               elevation: 2,
-              alignment: Alignment.centerLeft,
-              actionsPadding: EdgeInsets.all(20)
+              alignment: Alignment.center,
+              actionsPadding: const EdgeInsets.all(20)
             ),
             focusColor: Colors.cyan,
             appBarTheme: AppBarTheme(
@@ -102,7 +107,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: theme.blackTransparent,
             )),
         debugShowCheckedModeBanner: false,
-        home: const MyHomePage(),
+        home: const Updater(),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -127,13 +132,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   bool landscape = false;
   TabController? _tabController;
 
-  JobManagement jobManagement = const JobManagement();
+  JobManagement jobManagement = JobManagement(true);
   AdMobService adMobService = AdMobService();
 
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -155,98 +160,89 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return OrientationBuilder(builder: (context, orientation) {
       landscape = orientation == Orientation.landscape;
       return SafeArea(
-        child: Column(
-          children: [
-            if(Platform.isWindows || Platform.isLinux || Platform.isMacOS) Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(child: SizedBox(height: 28,child: MoveWindow())),
-                WindowBorder(
-                    color: Colors.black, child: const WindowButtons()),
-              ],
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                      theme.backGroundColor1,
-                      theme.backGroundColor2,
-                      theme.backGroundColor3,
-                      theme.backGroundColor4
-                    ])),
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  appBar: AppBar(
-                    bottom: TabBar(
-                      physics: const NeverScrollableScrollPhysics(),
-                      tabs: [
-                        Tab(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.table_chart),
-                              if(size.width > 700) Text("Modules", style: theme.textTheme().titleSmall,)
-                            ],
+        child: WillPopScope(
+          onWillPop: () async => false,
+          child: Column(
+            children: [
+              if(Platform.isWindows || Platform.isLinux || Platform.isMacOS) Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(child: SizedBox(height: 28,child: MoveWindow())),
+                  WindowBorder(
+                      color: Colors.black, child: const WindowButtons()),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                        theme.backGroundColor1,
+                        theme.backGroundColor2,
+                        theme.backGroundColor3,
+                        theme.backGroundColor4
+                      ])),
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    appBar: AppBar(
+                      bottom: TabBar(
+                        physics: const NeverScrollableScrollPhysics(),
+                        tabs: [
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.table_chart, color: Colors.white,),
+                                if(size.width > 700) Text("Content", style: theme.textTheme().titleSmall,)
+                              ],
+                            ),
                           ),
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.play_arrow, color: Colors.white,),
+                                if(size.width > 700) Text("Music Player", style: theme.textTheme().titleSmall,)
+                              ],
+                            ),
+                          )
+                        ],
+                        indicator: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              stops: [
+                                1
+                              ],
+                              colors: [
+                                Colors.cyan,
+                              ]),
                         ),
-                        Tab(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.play_arrow),
-                              if(size.width > 700) Text("Music Player", style: theme.textTheme().titleSmall,)
-                            ],
-                          ),
-                        ),
-                        Tab(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.task),
-                              if(size.width > 700) Text("App's Jobs" , style: theme.textTheme().titleSmall,)
-                            ],
-                          ),
-                        )
-                      ],
-                      indicator: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: [
-                              1
-                            ],
-                            colors: [
-                              Colors.cyan,
-                            ]),
+                        controller: _tabController,
                       ),
-                      controller: _tabController,
                     ),
-                  ),
-                  body: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      // Tab One
-                      const Modules(),
+                    body: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        // Tab One
+                        const Modules(),
 
-                      const AudioPlaylistManager(),
-                      // Tab Three
-                      jobManagement
-                    ],
+                        const AudioPlaylistManager()
+                      ],
+                    ),
+                    bottomNavigationBar:getAdBanner(),
                   ),
-                  bottomNavigationBar:getAdBanner(),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     });

@@ -1,10 +1,10 @@
-import 'package:developersuniverse_client/page/Modules/EArchive/electronic-archive-controller.dart';
+import 'package:developersuniverse_client/page/Modules/EArchive/electronic_archive_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../../models/common-model.dart';
-import '../../../services/common-service.dart';
+import '../../../models/common_model.dart';
+import '../../../services/common_service.dart';
 
 class ElectronicArchivePage extends StatefulWidget {
   const ElectronicArchivePage({Key? key}) : super(key: key);
@@ -30,9 +30,10 @@ class _ElectronicArchivePageState extends State<ElectronicArchivePage>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return OrientationBuilder(builder: (context, orientation) {
+    return OrientationBuilder(builder: (context, orientation)
+    {
       landscape = orientation == Orientation.landscape;
-      SingleChildScrollView(
+      return SingleChildScrollView(
         key: const ValueKey("modulesMenu"),
         child: Column(
           children: [
@@ -42,15 +43,14 @@ class _ElectronicArchivePageState extends State<ElectronicArchivePage>
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.green
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.green
                   ),
                   child: IconButton(
                     splashColor: Colors.green,
                     icon: const Icon(FontAwesomeIcons.folderPlus),
                     color: Colors.white,
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                   ),
                 ),
                 Container(
@@ -62,8 +62,7 @@ class _ElectronicArchivePageState extends State<ElectronicArchivePage>
                     splashColor: Colors.green,
                     icon: const Icon(FontAwesomeIcons.fileCirclePlus),
                     color: Colors.white,
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                   ),
                 ),
               ],
@@ -75,24 +74,32 @@ class _ElectronicArchivePageState extends State<ElectronicArchivePage>
               padding: const EdgeInsets.all(10),
               itemCount: c.electronicArchiveList.length,
               itemBuilder: (BuildContext ctx, index) {
-                ElectronicArchive electronicArchiveIndex = c.electronicArchiveList[index];
+                ElectronicArchive electronicArchiveIndex = c
+                    .electronicArchiveList[index];
 
                 return ListTile(
-                  leading: Image.asset(iconFromFileExtension(electronicArchiveIndex.name)),
+                  leading: Image.asset(
+                      iconFromFileExtension(electronicArchiveIndex.name)),
                   title: Text(
                     electronicArchiveIndex.name ?? "No named file",
-                    style: theme.textTheme().labelMedium,
+                    style: theme
+                        .textTheme()
+                        .labelMedium,
                   ),
                   subtitle: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         electronicArchiveIndex.description ?? "",
-                        style: theme.textTheme().labelSmall,
+                        style: theme
+                            .textTheme()
+                            .labelSmall,
                       ),
                       Text(
                         getFileSize(electronicArchiveIndex.size ?? 0),
-                        style: theme.textTheme().labelSmall,
+                        style: theme
+                            .textTheme()
+                            .labelSmall,
                       ),
                     ],
                   ),
@@ -104,8 +111,8 @@ class _ElectronicArchivePageState extends State<ElectronicArchivePage>
             )
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
 }

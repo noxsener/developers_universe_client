@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../models/common-model.dart';
-import '../services/common-service.dart';
-import '../services/translate-pipe.dart';
+import '../models/common_model.dart';
+import '../services/common_service.dart';
+import '../services/translate_pipe.dart';
 
 class Table extends StatefulWidget {
   Key? key;

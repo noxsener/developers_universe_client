@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../models/common-model.dart';
-import '../../services/common-service.dart';
+import '../../models/common_model.dart';
+import '../../services/common_service.dart';
 
 class ModulesController extends GetxController {
 

@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:developersuniverse_client/services/common-service.dart';
+import 'package:developersuniverse_client/services/common_service.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/src/media_type.dart';
 import 'package:intl/intl.dart';
 
-import '../models/common-model.dart';
-import '../page/Modules/UserProfile/user-profile.dart';
-import 'application-properties.dart';
+import '../models/common_model.dart';
+import '../page/Modules/UserProfile/user_profile.dart';
+import 'application_properties.dart';
 
 String get keyString {
   return '4bc2059c4cf54aca96e4413a93a0fdsq';
@@ -21,7 +21,7 @@ DateFormat dateFormatPlain = DateFormat("ddMMyyyyHHmmss");
 
 class HClient {
   String getIvString(String data) {
-    return '${data}0${data.substring(data.length - 1)}';
+    return '${data}0${data.substring(data.length - 2)}';
   }
 
   String encryptAES(String ivString, String plainText) {
@@ -45,7 +45,7 @@ class HClient {
   Map<String, String> getDefaultHeaders() {
     Map<String, String> headers = {
       "Content-Type": "application/json",
-      aHeader: dateFormatDetailed.format(now),
+      aHeader: DateFormat("ddMMyyyy HHmm").format(now),
       if (UserProfile.token != null)
         "Authorization": "Bearer ${UserProfile.token}"
     };
@@ -71,7 +71,7 @@ class HClient {
 
   Future<http.Response> post(String path,
       {JsonConvertable? object, Map<String, String>? headers}) async {
-    String data = dateFormatPlain.format(now.toUtc());
+    String data = "01234567890AB"; // dateFormatPlain.format(now.toUtc());
     String iv = getIvString(data);
     String? json;
     if (object != null) {
@@ -133,7 +133,7 @@ class HClient {
 
   Future<http.Response> put(String path, JsonConvertable? object,
       {Map<String, String>? headers}) async {
-    String data = dateFormatPlain.format(now.toUtc());
+    String data = "01234567890ABCDEF"; // dateFormatPlain.format(now.toUtc());
     String iv = getIvString(data);
     String? json;
     if (object != null) {

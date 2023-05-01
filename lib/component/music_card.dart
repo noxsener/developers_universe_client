@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-import '../models/common-model.dart';
-import '../webservices/audio-playlist-manager-service.dart';
+import '../models/common_model.dart';
+import '../webservices/audio_playlist_manager_service.dart';
 
 class MusicCard extends StatelessWidget {
   final Media media;

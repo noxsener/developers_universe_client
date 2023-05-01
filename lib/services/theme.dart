@@ -26,6 +26,11 @@ class CodenfastTheme {
       700: Color(0x70000000),
       800: Color(0x80000000),
       900: Color(0x90000000),
+      1000: Color(0xA0000000),
+      1100: Color(0xB0000000),
+      1200: Color(0xC0000000),
+      1300: Color(0xD0000000),
+      1400: Color(0xE0000000),
     },
   );
 

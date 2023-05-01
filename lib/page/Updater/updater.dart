@@ -1,80 +1,51 @@
-import 'package:developersuniverse_client/services/common-service.dart';
+import 'dart:async';
+import 'dart:ffi';
+
+import 'package:developersuniverse_client/main.dart';
+import 'package:developersuniverse_client/services/common_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
 
-import 'job-management-controller.dart';
+import '../../models/jobs/base_job.dart';
+import '../../models/jobs/media_file_index_list_download_job.dart';
+import 'updater_controller.dart';
 
-class JobManagement extends StatefulWidget {
-  const JobManagement({Key? key}) : super(key: key);
+class Updater extends StatefulWidget {
+  const Updater({Key? key}) : super(key: key);
 
   @override
-  State<JobManagement> createState() => _JobManagementState();
+  State<Updater> createState() => _UpdaterState();
 }
 
-class _JobManagementState extends State<JobManagement>
-    with
-        TickerProviderStateMixin,
-        AutomaticKeepAliveClientMixin<JobManagement> {
-  final c = Get.put(JobManagementController());
+class _UpdaterState extends State<Updater>
+    with TickerProviderStateMixin {
+  final c = Get.put(UpdaterController());
+  Timer? timer;
+  Duration sec = const Duration(seconds: 1);
 
   bool landscape = false;
 
   @override
   void initState() {
     super.initState();
-    c.initState(context, this);
-    if (c.job == null) {
-      BaseJob baseJob = BaseJob(
-          id: const Uuid().v1(),
-          name: "Music Download Task 1",
-          description: "Offline Music List for save bandwitdh",
-          icon: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                  color: const Color(0xFFFF2100),
-                  borderRadius: BorderRadius.circular(10),
-                boxShadow: theme.shadow(),),
-              child: const Icon(
-                Icons.music_note,
-                color: Colors.white,
-              )));
-      JobManagementController.jobList.add(baseJob);
-      JobManagementController.jobList.refresh();
-      c.job ??= baseJob.obs;
-    }
+    Future.delayed(Duration.zero, () {
+      c.updateAll(context);
+    });
   }
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return OrientationBuilder(builder: (context, orientation) {
-      landscape = orientation == Orientation.landscape;
-      return Scaffold(backgroundColor: Colors.transparent, body: jobListView()
-          // landscape
-          //     ? Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     musicPlayer(),
-          //     musicList(),
-          //   ],
-          // )
-          //     : Column(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     musicPlayer(),
-          //     musicList(),
-          //   ],
-          // ),
-          );
-    });
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: OrientationBuilder(builder: (context, orientation) {
+        landscape = orientation == Orientation.landscape;
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: jobListView(),
+        );
+      }),
+    );
   }
 
   Widget jobListView() {
@@ -105,18 +76,16 @@ class _JobManagementState extends State<JobManagement>
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
-            itemCount: JobManagementController.jobList.length,
+            itemCount: c.jobList.length,
             itemBuilder: (context, index) {
-              if (index >= JobManagementController.jobList.length) {
+              if (index >= c.jobList.length) {
                 return const SizedBox();
               }
-              BaseJob jobIndex = JobManagementController.jobList[index];
+              BaseJob jobIndex = c.jobList[index];
               return Obx(() => AnimatedContainer(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: c.job?.value.id == jobIndex.id
-                            ? Colors.cyan
-                            : Colors.transparent),
+                        color: Colors.cyan),
                     duration: const Duration(milliseconds: 200),
                     child: ListTile(
                       title: Text(jobIndex.name),

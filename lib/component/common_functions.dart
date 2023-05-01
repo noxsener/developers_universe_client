@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/common-service.dart';
+import '../services/common_service.dart';
 
 Visibility generateVisibleWidget(Widget widget, bool isShow, bool stillCollapsingArea) {
   return Visibility(

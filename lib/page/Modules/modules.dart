@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:developersuniverse_client/page/Modules/EArchive/electronic-archive.dart';
+import 'package:developersuniverse_client/page/Modules/EArchive/electronic_archive.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../models/common-model.dart';
-import 'UserProfile/user-profile.dart';
-import 'modules-controller.dart';
+import '../../models/common_model.dart';
+import 'UserProfile/user_profile.dart';
+import 'modules_controller.dart';
 
 class Modules extends StatefulWidget {
   const Modules({Key? key}) : super(key: key);

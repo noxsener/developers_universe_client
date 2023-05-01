@@ -2,7 +2,7 @@ library jobService;
 
 import 'dart:async';
 
-import 'package:developersuniverse_client/services/common-service.dart';
+import 'package:developersuniverse_client/services/common_service.dart';
 import 'package:ntp/ntp.dart';
 
 const Duration sec = Duration(seconds: 1);
